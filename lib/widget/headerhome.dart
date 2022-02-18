@@ -1,0 +1,268 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter_project_web_supportandservice/responsive.dart';
+// import 'package:flutter_project_web_supportandservice/states/Page/abouthome.dart';
+// import 'package:flutter_project_web_supportandservice/states/Page/aboutmeuser.dart';
+// import 'package:flutter_project_web_supportandservice/states/Page/homeuser.dart';
+// import 'package:flutter_project_web_supportandservice/states/Page/login.dart';
+// import 'package:flutter_project_web_supportandservice/states/components/home/home.dart';
+// import 'package:flutter_project_web_supportandservice/states/components/home/picture.dart';
+// import 'package:flutter_project_web_supportandservice/states/components/user/picture_components.dart';
+// import 'package:google_fonts/google_fonts.dart';
+
+// class HeaderHome extends StatefulWidget {
+//   const HeaderHome(double opacity, { Key? key }) : super(key: key);
+
+//   @override
+//   _HeaderHomeState createState() => _HeaderHomeState();
+// }
+
+// class _HeaderHomeState extends State<HeaderHome> {
+//   final List _isHovering = [
+//     false,
+//     false,
+//     false,
+//     false,
+//     false,
+//     false,
+//     false,
+//   ];
+//   @override
+//   Widget build(BuildContext context) {
+//     var size = MediaQuery.of(context).size;
+//     return PreferredSize(
+//       preferredSize: Size(size.width, 70),
+//       child: Container(
+//         decoration: BoxDecoration(
+//           boxShadow: [
+//             BoxShadow(
+//               color: Colors.white38,
+//               blurRadius: 10.0,
+//               spreadRadius: 1.0,
+//               offset: Offset(2.0, 2.0),
+//             ),
+//           ],
+//           color: Colors.greenAccent.shade700,
+//         ),
+//         height: 75,
+//         // color: Colors.greenAccent.shade100,
+//         child: Row(
+//           children: [
+//             Padding(
+//               padding: const EdgeInsets.only(left: 60),
+//               child: Image(
+//                 image: AssetImage('images/pictureicon/logo.png'),
+//                 width: 40,
+//               ),
+//             ),
+//             SizedBox(
+//               width: size.width / 70,
+//             ),
+//             Text(
+//               'NAVANURAK',
+//               style: TextStyle(
+//                   fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 3),
+//             ),
+//             SizedBox(
+//               width: size.width / 45,
+//             ),
+//             if (!Responsive.isMobileContent(context))
+//               InkWell(
+//                 onHover: (value) {
+//                   setState(() {
+//                     value ? _isHovering[0] = true : _isHovering[0] = false;
+//                   });
+//                 },
+//                 onTap: () {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => Home(),
+//                     ),
+//                   );
+//                 },
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: [
+//                     Text(
+//                       'หน้าหลัก',
+//                       style: GoogleFonts.kanit(
+//                         textStyle: TextStyle(
+//                           color: _isHovering[0] ? Colors.black : Colors.black,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                     ),
+//                     Visibility(
+//                       maintainAnimation: true,
+//                       maintainState: true,
+//                       maintainSize: true,
+//                       visible: _isHovering[0],
+//                       child: Container(
+//                         height: 2,
+//                         width: 50,
+//                         color: Colors.white,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             SizedBox(
+//               width: size.width / 35,
+//             ),
+//             InkWell(
+//               onHover: (value) {
+//                 setState(() {
+//                   value ? _isHovering[1] = true : _isHovering[1] = false;
+//                 });
+//               },
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) => AboutHome(),
+//                   ),
+//                 );
+//               },
+//               child: Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: [
+//                   Text(
+//                     'เกี่ยวกับเรา',
+//                     style: GoogleFonts.kanit(
+//                       textStyle: TextStyle(
+//                         color: _isHovering[1] ? Colors.black : Colors.black,
+//                         fontSize: 18,
+//                       ),
+//                     ),
+//                   ),
+//                   Visibility(
+//                     maintainAnimation: true,
+//                     maintainState: true,
+//                     maintainSize: true,
+//                     visible: _isHovering[1],
+//                     child: Container(
+//                       height: 2,
+//                       width: 50,
+//                       color: Colors.white,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             SizedBox(
+//               width: size.width / 35,
+//             ),
+//             InkWell(
+//               onHover: (value) {
+//                 setState(() {
+//                   value ? _isHovering[2] = true : _isHovering[2] = false;
+//                 });
+//               },
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) => Picture(),
+//                   ),
+//                 );
+//               },
+//               child: Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: [
+//                   Text(
+//                     'ข้อมูลการท่องเที่ยว',
+//                     style: GoogleFonts.kanit(
+//                       textStyle: TextStyle(
+//                         color: _isHovering[2] ? Colors.black : Colors.black,
+//                         fontSize: 18,
+//                       ),
+//                     ),
+//                   ),
+//                   Visibility(
+//                     maintainAnimation: true,
+//                     maintainState: true,
+//                     maintainSize: true,
+//                     visible: _isHovering[2],
+//                     child: Container(
+//                       height: 2,
+//                       width: 100,
+//                       color: Colors.white,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             SizedBox(
+//               width: size.width / 35,
+//             ),
+//             Spacer(),
+//             Padding(
+//               padding: EdgeInsets.only(right: size.width*0.03),
+//               child: InkWell(
+//                 onHover: (value) {
+//                   setState(() {
+//                     value ? _isHovering[3] = true : _isHovering[3] = false;
+//                   });
+//                 },
+//                 onTap: () async {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => LoginPage(),
+//                     ),
+//                   );
+//                 },
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: [
+//                     Text(
+//                       'เข้าสู่ระบบ',
+//                       style: GoogleFonts.kanit(
+//                         textStyle: TextStyle(
+//                           color: _isHovering[3] ? Colors.black : Colors.black,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                     ),
+//                     Visibility(
+//                       maintainAnimation: true,
+//                       maintainState: true,
+//                       maintainSize: true,
+//                       visible: _isHovering[3],
+//                       child: Container(
+//                         height: 2,
+//                         width: 60,
+//                         color: Colors.white,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             // Spacer(),
+//             // Padding(
+//             //   padding: const EdgeInsets.only(right: 30),
+//             //   child: Text(
+//             //     firstname == null ? 'firstname ' : ' User : $firstname',
+//             //     // 'User',
+//             //     style: GoogleFonts.kanit(
+//             //       textStyle: TextStyle(
+//             //         color: Colors.black,
+//             //         fontSize: 16,
+//             //       ),
+//             //     ),
+//             //   ),
+//             // ),
+//             if (Responsive?.isMobileContent(context))
+//               IconButton(
+//                 icon: Icon(Icons.menu),
+//                 onPressed: () {
+//                   Scaffold.of(context).openEndDrawer();
+//                 },
+//               ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

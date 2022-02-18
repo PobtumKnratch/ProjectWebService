@@ -1,0 +1,289 @@
+
+item {
+  id:1
+  name:'signboard'
+}
+item {
+  id:2
+  name:'electric pole'
+}
+item {
+  id:3
+  name:'building'
+}
+item {
+  id:4
+  name:'pipe'
+}
+item {
+  id:5
+  name:'bridge railing'
+}
+item {
+  id:6
+  name:'electric wire'
+}
+item {
+  id:7
+  name:'roof'
+}
+item {
+  id:8
+  name:'tree'
+}
+item {
+  id:9
+  name:'grass'
+}
+item {
+  id:10
+  name:'car'
+}
+item {
+  id:11
+  name:'road'
+}
+item {
+  id:12
+  name:'pork'
+}
+item {
+  id:13
+  name:'mama'
+}
+item {
+  id:14
+  name:'fork'
+}
+item {
+  id:15
+  name:'spoon'
+}
+item {
+  id:16
+  name:'noodle'
+}
+item {
+  id:17
+  name:'Kale'
+}
+item {
+  id:18
+  name:'pancake'
+}
+item {
+  id:19
+  name:'mixed vegetables'
+}
+item {
+  id:20
+  name:'Rice Crackers'
+}
+item {
+  id:21
+  name:'papaya salad'
+}
+item {
+  id:22
+  name:'three-flavored fish'
+}
+item {
+  id:23
+  name:'glass'
+}
+item {
+  id:27
+  name:'food plate'
+}
+item {
+  id:25
+  name:'small basket'
+}
+item {
+  id:26
+  name:'Stir Fried Mushrooms'
+}
+item {
+  id:28
+  name:'seafood'
+}
+item {
+  id:29
+  name:'mushroom'
+}
+item {
+  id:30
+  name:'lettuce'
+}
+item {
+  id:31
+  name:'tissue box'
+}
+item {
+  id:32
+  name:'meatball'
+}
+item {
+  id:33
+  name:'chopsticks'
+}
+item {
+  id:34
+  name:'cashew nut'
+}
+item {
+  id:35
+  name:'egg'
+}
+item {
+  id:36
+  name:'Baked Shrimp with Glass Noodles'
+}
+item {
+  id:37
+  name:'bean'
+}
+item {
+  id:38
+  name:'jar'
+}
+item {
+  id:39
+  name:'food'
+}
+item {
+  id:40
+  name:'Human'
+}
+item {
+  id:41
+  name:'garlic'
+}
+item {
+  id:42
+  name:'rice'
+}
+item {
+  id:43
+  name:'fried rice'
+}
+item {
+  id:44
+  name:'fried fish'
+}
+item {
+  id:45
+  name:'sink'
+}
+item {
+  id:46
+  name:'Curry Rice'
+}
+item {
+  id:47
+  name:'soup'
+}
+item {
+  id:48
+  name:'side dishes'
+}
+item {
+  id:49
+  name:'buddha'
+}
+item {
+  id:50
+  name:'lamp'
+}
+item {
+  id:51
+  name:'flower vase'
+}
+item {
+  id:52
+  name:'fan'
+}
+item {
+  id:53
+  name:'speaker'
+}
+item {
+  id:54
+  name:'statue'
+}
+item {
+  id:55
+  name:'picture'
+}
+item {
+  id:56
+  name:'pagoda'
+}
+item {
+  id:57
+  name:'vinyl'
+}
+item {
+  id:58
+  name:'monk'
+}
+item {
+  id:59
+  name:'buddha shelf'
+}
+item {
+  id:60
+  name:'temple roof'
+}
+item {
+  id:61
+  name:'wall'
+}
+item {
+  id:62
+  name:'glass door'
+}
+item {
+  id:63
+  name:'temple gate'
+}
+item {
+  id:64
+  name:'window'
+}
+item {
+  id:65
+  name:'motorcycle'
+}
+item {
+  id:66
+  name:'temple'
+}
+item {
+  id:67
+  name:'stairs'
+}
+item {
+  id:68
+  name:'tuk tuk'
+}
+item {
+  id:69
+  name:'sunshade'
+}
+item {
+  id:70
+  name:'pole'
+}
+item {
+  id:71
+  name:'light bulb'
+}
+item {
+  id:72
+  name:'table'
+}
+item {
+  id:73
+  name:'door'
+}
