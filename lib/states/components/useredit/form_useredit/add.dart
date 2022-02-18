@@ -1,4 +1,4 @@
-// import 'dart:html';
+import 'dart:html' as html;
 import 'dart:io';
 import 'dart:convert';
 import 'dart:math';
@@ -6,10 +6,11 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:azblob/azblob.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:open_file/open_file.dart';
-// import 'package:mime/mime.dart';
+import 'package:mime_type/mime_type.dart';
 // import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 import 'package:async/async.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -79,20 +80,19 @@ class _BodyState extends State<Body> {
   double _scrollPosition = 0;
   double _opacity = 0;
   File? file;
-  // Path? path;
-  String image = '';
-  // String? selectName;
-  // ignore: deprecated_member_use
-  // List topic = [];
+  String? image;
   late String name, tag, description;
-  // ImagePicker picker = ImagePicker();
   Provider? provider;
   bool kIsWeb = identical(0, 0.0);
-  // late PickedFile file;
   Uint8List webImage = Uint8List(10);
 
   FilePickerResult? result;
   PlatformFile? platformFile;
+
+
+   late html.File _cloudFile;
+ var _fileBytes;
+ late Image _imageWidget;
 
   String? user_id;
   String? topic_id;
@@ -121,6 +121,61 @@ class _BodyState extends State<Body> {
   TextEditingController tagController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
+  choiceImage() async {
+    var imageFiles = await ImagePickerWeb.getMultiImagesAsFile();
+    String? mimeType = mime(Path.basename(imageFiles!.first.name));
+    html.File mediaFile =
+        new html.File(imageFiles, imageFiles.first.name, {'type': mimeType});
+
+    if (mediaFile != null) {
+      setState(() {
+        _cloudFile = mediaFile;
+        _fileBytes = imageFiles;
+        _imageWidget = Image.network(imageFiles.first.name);
+      });
+    }
+    // var pickerImage = await ImagePickerWeb.getImageAsBytes();
+    // if (pickerImage != null) {
+    //   setState(
+    //     () {
+    //       file = pickerImage;
+    //       print('Selected image = $file');
+    //     },
+    //   );
+    //   image = base64Encode(file!.readAsBytesSync());
+    //   return image;
+    // } else {
+    //   print('No image selected.');
+    // }
+  }
+
+  Future addCategory() async {
+    final urldata = Uri.parse(
+        "http://localhost/flutter_project_web_supportandservice/Backend/server/uptravel.php");
+    String pathUser =
+        'http://localhost/flutter_project_web_supportandservice/Backend/server/getuserwhereuser.php?isAdd=true&user_id=$user_id';
+    await http.get(Uri.parse(pathUser)).then(
+      (value) async {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        String? user_id = preferences.getString('user_id');
+
+        var data = {
+          "user_id": user_id,
+          "name": nameController.text,
+          "tag": tagController.text,
+          "description": descriptionController.text,
+          "image": image,
+        };
+        var response = await http.post(urldata, body: data);
+        if (response.statusCode == 200) {
+          print('Response Success ==> ${response.body}');
+        } else {
+          print('Error Status Code ${response.statusCode}');
+        }
+      },
+    );
+  }
+
   Future add(File file) async {
     String name = nameController.text;
     String tag = tagController.text;
@@ -130,57 +185,62 @@ class _BodyState extends State<Body> {
     print('picture ==> $file');
     String pathUser =
         'http://localhost/flutter_project_web_supportandservice/Backend/server/getuserwhereuser.php?isAdd=true&user_id=$user_id';
-    await http.get(Uri.parse(pathUser)).then((value) async {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String? user_id = preferences.getString('user_id');
+    await http.get(Uri.parse(pathUser)).then(
+      (value) async {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        String? user_id = preferences.getString('user_id');
 
 // ignore: deprecated_member_use
-      var stream = new http.ByteStream(DelegatingStream.typed(file.openRead()));
-      var length = await file.length();
-      var uri =
-          "http://localhost/flutter_project_web_supportandservice/Backend/server/insert.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image";
+        var stream =
+            new http.ByteStream(DelegatingStream.typed(file.openRead()));
+        var length = await file.length();
+        var uri =
+            "http://localhost/flutter_project_web_supportandservice/Backend/server/insert.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image";
 
-      String apiSaveImage =
-          'http://localhost/flutter_project_web_supportandservice/Backend/server/savefileImage.php?isAdd=true&image=$file';
-      print('API Save Image ==> $apiSaveImage');
+        String apiSaveImage =
+            'http://localhost/flutter_project_web_supportandservice/Backend/server/savefileImage.php?isAdd=true&image=$file';
+        print('API Save Image ==> $apiSaveImage');
 
-      var request = new http.MultipartRequest("POST", Uri.parse(uri));
+        var request = new http.MultipartRequest("POST", Uri.parse(uri));
 
-      var multipartFile = new http.MultipartFile.fromBytes(
-          apiSaveImage, File.fromUri(Uri.parse(apiSaveImage)).readAsBytesSync(),
-          filename: file.path, contentType: new MediaType('image', 'jpeg'));
+        var multipartFile = new http.MultipartFile.fromBytes(apiSaveImage,
+            File.fromUri(Uri.parse(apiSaveImage)).readAsBytesSync(),
+            filename: file.path, contentType: new MediaType('image', 'jpeg'));
 
-      // var multipartFile = new http.MultipartFile("image", stream, length,
-      //     filename: basename(file.path));
+        // var multipartFile = new http.MultipartFile("image", stream, length,
+        //     filename: basename(file.path));
 
-      await http.post(
-        Uri.parse(apiSaveImage),
-        body: multipartFile,
-        encoding: Encoding.getByName("utf-8"),
-        headers: {"Content-Type": "multipart/form-data"},
-      ).then(
-        (value) {
-          image = '/Backend/server/Data/fileupload2/$file';
-          print('image ==> $image');
-          request.files.add(multipartFile);
-          // request.fields['name'] = nameController.text;
-          // request.fields['tag'] = tagController.text;
-          // request.fields['description'] = descriptionController.text;
-        },
-      );
+        await http.post(
+          Uri.parse(apiSaveImage),
+          body: multipartFile,
+          encoding: Encoding.getByName("utf-8"),
+          headers: {"Content-Type": "multipart/form-data"},
+        ).then(
+          (value) {
+            image = '/Backend/server/Data/fileupload2/$file';
+            print('image ==> $image');
+            request.files.add(multipartFile);
+            // request.fields['name'] = nameController.text;
+            // request.fields['tag'] = tagController.text;
+            // request.fields['description'] = descriptionController.text;
+          },
+        );
 
-      var respond = await request.send();
-      await http.get(
-        Uri.parse(uri),
-        headers: {"Content-Type": "multipart/form-data"},
-      ).then((value) {
-        if (respond.statusCode == 200) {
-          print("Image Uploaded");
-        } else {
-          print("Upload Failed");
-        }
-      });
-    });
+        var respond = await request.send();
+        await http.get(
+          Uri.parse(uri),
+          headers: {"Content-Type": "multipart/form-data"},
+        ).then(
+          (value) {
+            if (respond.statusCode == 200) {
+              print("Image Uploaded");
+            } else {
+              print("Upload Failed");
+            }
+          },
+        );
+      },
+    );
   }
 
   Future ApiaddData(PlatformFile? platformFile
@@ -505,10 +565,10 @@ class _BodyState extends State<Body> {
           // basename(file.path!);
           result!.files.first.name;
 
-    //   print('Name:${fileName}');
-    //   print('Bytes:${fileBytes}');
-    //   print('Size:${platformFile!.size}');
-    //   print('Extension:${platformFile!.extension}');
+      //   print('Name:${fileName}');
+      //   print('Bytes:${fileBytes}');
+      //   print('Size:${platformFile!.size}');
+      //   print('Extension:${platformFile!.extension}');
       // print('Path:${platformFile!.path}');
       // uploadImageAndInsertData(platformFile);
       // final newFile = await saveFilePermanently(file);
@@ -541,11 +601,11 @@ class _BodyState extends State<Body> {
   //   lockParentWindow: true,
   // );
   // ignore: deprecated_member_use
-    // final PickedFile? myfile = await ImagePicker().getImage(
-    //   source: imageSource,
-    //   maxHeight: 50.0,
-    //   maxWidth: 50.0,
-    // );
+  // final PickedFile? myfile = await ImagePicker().getImage(
+  //   source: imageSource,
+  //   maxHeight: 50.0,
+  //   maxWidth: 50.0,
+  // );
   //   // if (result != null) {
   //   //   PlatformFile _file = result.files.first;
   //   //   // openFile(file);
@@ -594,7 +654,7 @@ class _BodyState extends State<Body> {
                 borderRadius: BorderRadius.circular(7.0),
                 border: Border.all(color: Colors.black45, width: 1.2),
               ),
-              child: file == null
+              child: image == null
                   ? Text(
                       "กรุณากดปุ่ม"
                       "อัพโหลด"
@@ -614,7 +674,7 @@ class _BodyState extends State<Body> {
                         borderRadius: BorderRadius.circular(7.0),
                         border: Border.all(color: Colors.black45, width: 1),
                       ),
-                      // child: Image.network(file!.path),
+                      child: Image.network(image!),
                     ),
             ),
           ),
@@ -914,37 +974,7 @@ class _BodyState extends State<Body> {
                                   // if (file != null)
                                   MaterialButton(
                                     onPressed: () async {
-                                      // FilePickerResult? result =
-                                      //     await FilePicker.platform.pickFiles(
-                                      //   type: FileType.image,
-                                      //   withData: true,
-                                      //   allowMultiple: true,
-                                      //   withReadStream: true,
-                                      //   lockParentWindow: true,
-                                      // );
-
-                                      // if (result != null) {
-                                      //   PlatformFile file = result.files.first;
-                                      //   // openFile(file);
-                                      //   Uint8List? fileBytes =
-                                      //       result.files.first.bytes;
-                                      //   String fileName =
-                                      //       // basename(file.path!);
-                                      //       result.files.first.name;
-
-                                      //   print('Name:${fileName}');
-                                      //   print('Bytes:${fileBytes}');
-                                      //   print('Size:${file.size}');
-                                      //   print('Extension:${file.extension}');
-                                      //   // print('Path:${file.path}');
-
-                                      //   final newFile =
-                                      //       await saveFilePermanently(file);
-                                      //   // print('From Path : ${file.path}');
-                                      //   print('To Path : ${newFile.path}');
-                                      // }
-                                      // pickerimage(ImageSource.gallery);
-                                      pickerimage();
+                                      choiceImage();
                                     },
                                     color: Colors.grey.shade400,
                                     height: 45,
@@ -1001,7 +1031,8 @@ class _BodyState extends State<Body> {
                                           //       'ไม่สามารถอัพโหลดได้',
                                           //       'กรุณากรอกข้อมูลให้ครบถ้วน');
                                         } else {
-                                          ApiaddData(platformFile);
+                                          addCategory();
+                                          // ApiaddData(platformFile);
                                           // uploadImageAndInsertData(
                                           //     platformFile);
                                           // add(file!);
