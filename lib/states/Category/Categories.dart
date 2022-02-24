@@ -14,6 +14,7 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
+  // ignore: unused_field
   static const String routeName = '/categories';
   List<Widget> categories = [
     Travel(),
@@ -23,6 +24,7 @@ class _CategoriesState extends State<Categories> {
   ];
   int selectIndex = 0;
   double _scrollPosition = 0;
+  // ignore: unused_field
   double _opacity = 0;
 
   Widget menubuild() {
@@ -572,7 +574,6 @@ class _CategoriesState extends State<Categories> {
     _opacity = _scrollPosition < size.height * 0.40
         ? _scrollPosition / (size.height * 0.40)
         : 1;
-    Size sized = MediaQuery.of(context).size;
     return Responsive(
       mobile: Container(
         child: Column(

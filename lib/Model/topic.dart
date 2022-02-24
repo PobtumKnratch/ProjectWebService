@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 
 // List<Topic> topicFromJson(String str) =>
 //     List<Topic>.from(json.decode(str).map((x) => Topic.fromJson(x)));
@@ -8,11 +8,15 @@ import 'dart:convert';
 
 class Topic {
   Topic({
+    // ignore: non_constant_identifier_names
     required this.topic_id,
+    // ignore: non_constant_identifier_names
     required this.topic_name,
   });
 
+  // ignore: non_constant_identifier_names
   String topic_id;
+  // ignore: non_constant_identifier_names
   String topic_name;
 
   factory Topic.fromJson(Map<String, dynamic> json) => Topic(

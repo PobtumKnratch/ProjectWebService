@@ -34,11 +34,9 @@
 			ini_set("memory_limit","1024M");
 	$response[] = $rowdata;
 	}
-	
+}
 	echo json_encode($response, \JSON_UNESCAPED_UNICODE);
-	} else {
-		echo "error";
-	}
+	
 	//อ่านข้อมูลที่ส่งมาแล้วเก็บไว้ที่ตัวแปร data
 	$data = file_get_contents("php://input");
 

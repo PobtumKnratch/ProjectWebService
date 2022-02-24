@@ -1,17 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_web_supportandservice/Model/fileupload.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/states/components/user/picture_components.dart';
 import 'package:flutter_project_web_supportandservice/widget/max_width_contanier.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_project_web_supportandservice/Model/fileupload2.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../../widget/constants.dart';
 
 class TeavelSearch extends StatefulWidget {
-  const TeavelSearch({
+  List<Upload> models;
+   TeavelSearch({required this.models,
     Key? key,
   }) : super(key: key);
   @override
@@ -33,7 +34,7 @@ class _TravelState extends State<TeavelSearch> {
     setState(() {
       loading = true;
     });
-    await Future.delayed(Duration(milliseconds: 500));
+    // await Future.delayed(Duration(milliseconds: 500));
     List<String> newData = upload2.length >= 60
         ? []
         : List.generate(20, (index) => "List Upload ${index + upload2.length}");
@@ -58,8 +59,6 @@ class _TravelState extends State<TeavelSearch> {
       }
     });
   }
-
-  
 
   @override
   void dispose() {
@@ -145,7 +144,7 @@ class _TravelState extends State<TeavelSearch> {
           //   height: 20,
           // ),
           Container(
-            height: size.height, 
+            height: size.height,
             // width: size.width,
             child: FutureBuilder<List<Upload2>>(
               future: getupload2(),

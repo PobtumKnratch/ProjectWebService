@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project_web_supportandservice/Model/fileupload2.dart';
+import 'package:flutter_project_web_supportandservice/Model/fileupload.dart';
 import 'package:flutter_project_web_supportandservice/widget/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
 class CardDataEdit extends StatefulWidget {
-  Upload2 model;
+  Upload model;
   CardDataEdit({required this.model, Key? key}) : super(key: key);
 
   @override
@@ -54,7 +54,7 @@ class _CardDataEditState extends State<CardDataEdit> {
                       placeholder: (context, url) => Center(
                         child: CircularProgressIndicator(),
                       ),
-                      imageUrl: '$hosttravel/${widget.model.image}',
+                      imageUrl: '$hostpic/${widget.model.image}',
                       fit: BoxFit.cover,
                       width: sizeWidth,
                       height: sizeWidth,

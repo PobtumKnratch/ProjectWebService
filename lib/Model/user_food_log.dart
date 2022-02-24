@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
-import 'package:flutter/material.dart';
 
 List<Food> foodFromJson(String str) => List<Food>.from(json.decode(str).map((x) => Food.fromJson(x)));
 

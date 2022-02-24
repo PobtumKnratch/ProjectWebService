@@ -38,24 +38,21 @@ String? initialRoute;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences? preferences = await SharedPreferences.getInstance();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
   String? lognedUser = preferences.getString('user_id');
   String? status = preferences.getString('user_status');
 
-  if (lognedUser?.isEmpty ?? true) {
+  if (lognedUser != null) {
     switch (status) {
       case 'US':
         initialRoute = '/homeuser';
         break;
-      case 'ED':
-        initialRoute = '/homeuseredit';
-        break;
       default:
         // ignore: unnecessary_statements
-        initialRoute = '/login';
+        initialRoute = '/homeuseredit';
     }
   } else {
-    initialRoute = '/homeuser';
+    initialRoute = '/login';
   }
 
   runApp(MyApp());
@@ -72,33 +69,5 @@ class MyApp extends StatelessWidget {
       routes: map,
       initialRoute: initialRoute,
     );
-
-    // return MultiProvider(
-    //   providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
-    //   child: MaterialApp(
-    //     home: FutureBuilder(
-    //       future: getUserData(),
-    //       builder: (context, snapshot) {
-    //         switch (snapshot.connectionState) {
-    //           case ConnectionState.none:
-    //           case ConnectionState.waiting:
-    //             return CircularProgressIndicator();
-    //           default:
-    //             if (snapshot.hasError)
-    //               return Text('Error: ${snapshot.error}');
-    //             else if (snapshot.data == null) {
-    //               return PageUserlogin();
-    //             } else {
-    //               Provider.of<UserProvider>(context).setUser(snapshot.data);
-    //             }
-    //             return HomeUser();
-    //         }
-    //       },
-    //     ),
-    //     debugShowCheckedModeBanner: false,
-    //     routes: map,
-    //     initialRoute: initialRoute,
-    //   ),
-    // );
   }
 }

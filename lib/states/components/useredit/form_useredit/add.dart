@@ -257,6 +257,50 @@ class _BodyState extends State<Body> {
   //   );
   // }
 
+  // Future<void> insertPicture(Uint8List _bytesImgData,
+  //     {String dirName = 'img1'}) async {
+  //   String name = nameController.text;
+  //   String tag = tagController.text;
+  //   String description = descriptionController.text;
+  //   //flutter_project_web_supportandservice/Backend/server/backendlastversion/pictur_data/saveFile.php
+  //   String path = '$hosttravel/saveFile.php?dirName=$dirName';
+  //   print('path ==>> $path');
+
+  //   int i = Random().nextInt(100000000);
+  //   String fileName = 'img1_$i.jpg';
+  //   Map<String, dynamic> map = Map();
+  //   map['file'] = MultipartFile.fromBytes(_bytesImgData, filename: fileName);
+  //   FormData data = FormData.fromMap(map);
+  //   await dio
+  //       .post(
+  //     path,
+  //     data: data,
+  //   )
+  //       .then(
+  //     (value) {
+  //       dio.options.headers['content-Type'] = 'text/plain; charset=UTF-8';
+  //       dio.options.headers['Access-Control-Allow-Origin'] = '*';
+  //       dio.options.headers['Access-Control-Allow-Methods'] = 'GET , POST';
+  //       // print('Path Data ==> $fileName');
+  //       // image = 'Backend/server/Data/fileupload2/$fileName';
+  //       // image = fileName;
+  //       // print('image ==> $image');
+  //       String apiInsertData =
+  //           '$hostInsert/insertPicture.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=/$dirName/$fileName';
+  //       dio.get(apiInsertData).then(
+  //         (value) {
+  //           if (value.toString() == 'true') {
+  //             print('insert true');
+  //             Navigator.pop(context);
+  //           } else {
+  //             print('fail upload');
+  //           }
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
   Future<void> ApiaddData(
     Uint8List _bytesImgData,
   ) async {
@@ -1123,15 +1167,17 @@ class _BodyState extends State<Body> {
                                           //       'ไม่สามารถอัพโหลดได้',
                                           //       'กรุณากรอกข้อมูลให้ครบถ้วน');
                                         } else {
-                                          // insertDataImage(_bytesData!);
+                                          // String dirName = 'img1';
+                                          // if (topic_id == '1') {
+                                          //   dirName = 'Food';
+                                          // } else if (topic_id == '2') {
+                                          //   dirName = 'Travel';
+                                          // } else if (topic_id == '3') {
+                                          //   dirName = 'Signboard';
+                                          // } else {
+                                          //   dirName = 'Senario';
+                                          // }
                                           ApiaddData(_bytesData!);
-                                          // addCategory();
-                                          // ApiaddData(platformFile);
-                                          // uploadImageAndInsertData(
-                                          //     platformFile);
-                                          // add(file!);
-                                          // upload();
-                                          // insertImage(file: file!);
                                         }
                                       }
                                     },

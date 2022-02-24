@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
@@ -18,8 +20,8 @@ class _FoodState extends State<FoodState> {
   List<String> upload = [];
   bool loading = false, allLoaded = false;
   final ScrollController _scrollController = ScrollController();
+  // ignore: unused_field
   double _scrollPosition = 0;
-  double _opacity = 0;
 
   mockFetch() async {
     if (allLoaded) {
@@ -63,9 +65,6 @@ class _FoodState extends State<FoodState> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    _opacity = _scrollPosition < size.height * 0.40
-        ? _scrollPosition / (size.height * 0.40)
-        : 1;
     return Responsive(
       mobile: Container(
         child: Column(
@@ -739,6 +738,7 @@ class _FoodState extends State<FoodState> {
   }
 
   showDialogFood(context, uploadimage, uploadname, uploaddate) {
+    // ignore: unused_local_variable
     Size size = MediaQuery.of(context).size;
     return showDialog(
       context: context,

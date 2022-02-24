@@ -34,15 +34,11 @@
 			ini_set("memory_limit","1024M");
 	$response[] = $rowdata;
 	}
-	
+}
 	echo json_encode($response, \JSON_UNESCAPED_UNICODE);
-	} else {
-		echo "error";
-	}
+	
 	//อ่านข้อมูลที่ส่งมาแล้วเก็บไว้ที่ตัวแปร data
 	$data = file_get_contents("php://input");
 
 	//แปลงข้อมูลที่อ่านได้ เป็น array แล้วเก็บไว้ที่ตัวแปร result
 	$result = json_decode($data,true,512, \JSON_UNESCAPED_UNICODE);
-
-?>

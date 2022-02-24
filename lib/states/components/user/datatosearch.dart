@@ -19,7 +19,7 @@ class DatatoSearch extends StatefulWidget {
 
 class _DatatoSearchState extends State<DatatoSearch> {
   List<Widget> search = [
-    TeavelSearch(),
+    TeavelSearch(models: []),
     ScenarioSearch(),
     FoodStateSearch(),
     SignboardSearch(),
@@ -31,7 +31,7 @@ class _DatatoSearchState extends State<DatatoSearch> {
   double _scrollPosition = 0;
   double _opacity = 0;
   final formKey = GlobalKey<FormState>();
-  List upload2 = [];
+  List<Upload2> upload2 = [];
 
   String? searchStatus;
 
@@ -77,8 +77,8 @@ class _DatatoSearchState extends State<DatatoSearch> {
   //         .toList();
   //     if (value == null ? false : true && value != '') {
   //       value = value!.toLowerCase();
-  //       show = show.where((element) => element.Name.toLowerCase().contains(value!) || 
-  //       element.Feature.toLowerCase().contains(value!) || 
+  //       show = show.where((element) => element.Name.toLowerCase().contains(value!) ||
+  //       element.Feature.toLowerCase().contains(value!) ||
   //       (element.upload2 == ''))
   //     }
   //   });
@@ -481,8 +481,8 @@ class _DatatoSearchState extends State<DatatoSearch> {
                                             //     builder: (context) => DataSearch(),
                                             //   ),
                                             // );
-                                            // searchupload(query);
-                                            Search();
+                                            searchupload(query);
+                                            // Search();
                                           }
                                         },
                                         color: Colors.greenAccent.shade400,

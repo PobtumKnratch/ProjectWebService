@@ -8,6 +8,7 @@ import 'package:flutter_project_web_supportandservice/Model/fileupload2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String hosttravel = 'http://localhost/flutter_project_web_supportandservice/Backend/server/backendlastversion/pictur_data/fileupload2';
+String hostpic = 'http://localhost/flutter_project_web_supportandservice/Backend/server/backendlastversion/pictur_data';
 String hostInsert = 'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/insertData';
 String hostlogin = 'http://localhost/flutter_project_web_supportandservice/Backend/server';
 

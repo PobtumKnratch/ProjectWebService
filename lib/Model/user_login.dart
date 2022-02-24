@@ -1,37 +1,45 @@
 import 'dart:convert';
 
+// ignore: non_constant_identifier_names
 List<Userlogin> FromJson(String str) =>
     List<Userlogin>.from(json.decode(str).map((x) => Userlogin.fromJson(x)));
 
+// ignore: non_constant_identifier_names
 String UserloginToJson(List<Userlogin> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Userlogin {
   Userlogin({
+    // ignore: non_constant_identifier_names
     this.user_id,
     this.username,
     this.password,
+    // ignore: non_constant_identifier_names
     this.topic_id,
     this.firstname,
     this.lastname,
     this.email,
     // this.current_login,
     // this.previous_login,
+    // ignore: non_constant_identifier_names
     this.user_status,
     this.token,
     this.status,
     this.chk,
   });
 
+  // ignore: non_constant_identifier_names
   String? user_id;
   String? username;
   String? password;
+  // ignore: non_constant_identifier_names
   String? topic_id;
   String? firstname;
   String? lastname;
   String? email;
   // String? current_login;
   // String? previous_login;
+  // ignore: non_constant_identifier_names
   String? user_status;
   String? token;
   int? status;
