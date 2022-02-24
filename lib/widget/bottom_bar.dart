@@ -1,6 +1,5 @@
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/widget/bottom_bar_column.dart';
-import 'package:flutter_project_web_supportandservice/widget/info_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

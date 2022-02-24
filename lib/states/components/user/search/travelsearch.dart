@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_project_web_supportandservice/Model/fileupload2.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../../../../widget/constants.dart';
+
 class TeavelSearch extends StatefulWidget {
   const TeavelSearch({
     Key? key,
@@ -57,17 +59,7 @@ class _TravelState extends State<TeavelSearch> {
     });
   }
 
-  Future<List<Upload2>> getupload2() async {
-    final url =
-        'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/ShowData/fileupload2.php';
-    final response = await http.get(Uri.parse(url));
-    print(response);
-    if (response.statusCode == 200) {
-      return upload2FromJson(response.body);
-    } else {
-      throw Exception(response.hashCode);
-    }
-  }
+  
 
   @override
   void dispose() {

@@ -1,18 +1,19 @@
 import 'dart:html' as html;
 import 'dart:io';
+import 'dart:io' show File;
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
-import 'package:get/get.dart';
-import 'package:azblob/azblob.dart';
+import 'package:flutter_project_web_supportandservice/widget/constants.dart';
+
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:open_file/open_file.dart';
 import 'package:mime_type/mime_type.dart';
-// import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:dio/dio.dart';
 import 'package:path/path.dart' as Path;
 import 'package:async/async.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:provider/provider.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
@@ -77,6 +78,16 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  List<Widget> itemPhotosWidgetList = <Widget>[];
+
+  final ImagePicker _picker = ImagePicker();
+  List<XFile>? photo = <XFile>[];
+  List<XFile> itemImagesList = <XFile>[];
+
+  List<String> downloadUrl = <String>[];
+
+  bool uploading = false;
+
   double _scrollPosition = 0;
   double _opacity = 0;
   File? file;
@@ -89,10 +100,13 @@ class _BodyState extends State<Body> {
   FilePickerResult? result;
   PlatformFile? platformFile;
 
-
-   late html.File _cloudFile;
- var _fileBytes;
- late Image _imageWidget;
+  Dio dio = Dio();
+  // late html.File _cloudFile;
+  // var _fileBytes;
+  // late Uint8List _imageWidget;
+  // PlatformFile? objFile = null;
+  List<int>? _selectedFile;
+  Uint8List? _bytesData;
 
   String? user_id;
   String? topic_id;
@@ -121,208 +135,337 @@ class _BodyState extends State<Body> {
   TextEditingController tagController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  choiceImage() async {
-    var imageFiles = await ImagePickerWeb.getMultiImagesAsFile();
-    String? mimeType = mime(Path.basename(imageFiles!.first.name));
-    html.File mediaFile =
-        new html.File(imageFiles, imageFiles.first.name, {'type': mimeType});
-
-    if (mediaFile != null) {
-      setState(() {
-        _cloudFile = mediaFile;
-        _fileBytes = imageFiles;
-        _imageWidget = Image.network(imageFiles.first.name);
-      });
+  addImage() {
+    for (var bytes in photo!) {
+      itemPhotosWidgetList.add(
+        Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: Container(
+            height: 90.0,
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                child: kIsWeb
+                    ? Image.network(File(bytes.path).path)
+                    : Image.file(
+                        File(bytes.path),
+                      ),
+              ),
+            ),
+          ),
+        ),
+      );
     }
-    // var pickerImage = await ImagePickerWeb.getImageAsBytes();
-    // if (pickerImage != null) {
-    //   setState(
-    //     () {
-    //       file = pickerImage;
-    //       print('Selected image = $file');
-    //     },
-    //   );
-    //   image = base64Encode(file!.readAsBytesSync());
-    //   return image;
-    // } else {
-    //   print('No image selected.');
-    // }
   }
 
-  Future addCategory() async {
-    final urldata = Uri.parse(
-        "http://localhost/flutter_project_web_supportandservice/Backend/server/uptravel.php");
-    String pathUser =
-        'http://localhost/flutter_project_web_supportandservice/Backend/server/getuserwhereuser.php?isAdd=true&user_id=$user_id';
-    await http.get(Uri.parse(pathUser)).then(
-      (value) async {
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        String? user_id = preferences.getString('user_id');
+  Future<void> insertImage(
+    Uint8List _bytesImgData,
+  ) async {
+    String path =
+        'http://localhost/flutter_project_web_supportandservice/Backend/server/savefileImage.php';
+    // print(path);
+    int i = Random().nextInt(99999);
+    String fileName = '$i.jpg';
+    Map<String, dynamic> map = {};
+    map['file'] = MultipartFile.fromBytes(_bytesImgData, filename: fileName);
+    FormData data = FormData.fromMap(map);
+    // print(data.files);
 
-        var data = {
-          "user_id": user_id,
-          "name": nameController.text,
-          "tag": tagController.text,
-          "description": descriptionController.text,
-          "image": image,
-        };
-        var response = await http.post(urldata, body: data);
-        if (response.statusCode == 200) {
-          print('Response Success ==> ${response.body}');
-        } else {
-          print('Error Status Code ${response.statusCode}');
-        }
-      },
+    await Dio()
+        .post(path, data: data)
+        .then(
+          (value) => print(value),
+        )
+        .onError((error, stackTrace) {
+      print('Error => $error');
+      // print('StackTrack ==> $stackTrace');
+      // return;
+    });
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        scrollable: true,
+        title: Text('เพิ่มรูปภาพสำเร็จ'),
+        content: Text('เพิ่มรูปภาพสำเร็จ'),
+      ),
     );
+
+    // showDialog(
+    //     context: context,
+    //     builder: (context) => AlertDialog(
+    //           scrollable: true,
+    //           title: Text(e.toString()),
+    //         ));
   }
 
-  Future add(File file) async {
+  startWebFilePicker() async {
+    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+    uploadInput.multiple = true;
+    uploadInput.draggable = true;
+    uploadInput.click();
+    uploadInput.onChange.listen((e) {
+      final files = uploadInput.files;
+      final file = files![0];
+      final reader = html.FileReader();
+      // print(file);
+      reader.onLoadEnd.listen((e) {
+        _handleResult(reader.result!);
+        // print(reader.result!);
+      });
+      reader.readAsDataUrl(file);
+    });
+  }
+
+  void _handleResult(Object result) {
+    setState(() {
+      _bytesData =
+          const Base64Decoder().convert(result.toString().split(",").last);
+      _selectedFile = _bytesData;
+      // print(_selectedFile);
+    });
+  }
+
+  // Future addCategory() async {
+  //   final urldata = Uri.parse(
+  //       "http://localhost/flutter_project_web_supportandservice/Backend/server/uptravel.php");
+  //   String pathUser =
+  //       'http://localhost/flutter_project_web_supportandservice/Backend/server/getuserwhereuser.php?isAdd=true&user_id=$user_id';
+  //   await http.get(Uri.parse(pathUser)).then(
+  //     (value) async {
+  //       SharedPreferences preferences = await SharedPreferences.getInstance();
+  //       String? user_id = preferences.getString('user_id');
+  //       print('user_id ==> ${user_id}');
+  //       print('name ==> ${name}');
+  //       print('tag ==> ${tag}');
+  //       print('description ==> ${description}');
+  //       print('image ==> ${_imageWidget}');
+
+  //       var data = {
+  //         "user_id": user_id,
+  //         "name": nameController.text,
+  //         "tag": tagController.text,
+  //         "description": descriptionController.text,
+
+  //       };
+  //       var response = await http.post(urldata, body: data);
+  //       if (response.statusCode == 200) {
+  //         print('Response Success ==> ${response.body}');
+  //       } else {
+  //         print('Error Status Code ${response.statusCode}');
+  //       }
+  //     },
+  //   );
+  // }
+
+  Future<void> ApiaddData(
+    Uint8List _bytesImgData,
+  ) async {
     String name = nameController.text;
     String tag = tagController.text;
     String description = descriptionController.text;
-    print(
-        '## userid = $user_id, namepicture = $name, tag = $tag, name = $description,');
-    print('picture ==> $file');
-    String pathUser =
-        'http://localhost/flutter_project_web_supportandservice/Backend/server/getuserwhereuser.php?isAdd=true&user_id=$user_id';
-    await http.get(Uri.parse(pathUser)).then(
-      (value) async {
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        String? user_id = preferences.getString('user_id');
-
-// ignore: deprecated_member_use
-        var stream =
-            new http.ByteStream(DelegatingStream.typed(file.openRead()));
-        var length = await file.length();
-        var uri =
-            "http://localhost/flutter_project_web_supportandservice/Backend/server/insert.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image";
-
-        String apiSaveImage =
-            'http://localhost/flutter_project_web_supportandservice/Backend/server/savefileImage.php?isAdd=true&image=$file';
-        print('API Save Image ==> $apiSaveImage');
-
-        var request = new http.MultipartRequest("POST", Uri.parse(uri));
-
-        var multipartFile = new http.MultipartFile.fromBytes(apiSaveImage,
-            File.fromUri(Uri.parse(apiSaveImage)).readAsBytesSync(),
-            filename: file.path, contentType: new MediaType('image', 'jpeg'));
-
-        // var multipartFile = new http.MultipartFile("image", stream, length,
-        //     filename: basename(file.path));
-
-        await http.post(
-          Uri.parse(apiSaveImage),
-          body: multipartFile,
-          encoding: Encoding.getByName("utf-8"),
-          headers: {"Content-Type": "multipart/form-data"},
-        ).then(
-          (value) {
-            image = '/Backend/server/Data/fileupload2/$file';
-            print('image ==> $image');
-            request.files.add(multipartFile);
-            // request.fields['name'] = nameController.text;
-            // request.fields['tag'] = tagController.text;
-            // request.fields['description'] = descriptionController.text;
-          },
-        );
-
-        var respond = await request.send();
-        await http.get(
-          Uri.parse(uri),
-          headers: {"Content-Type": "multipart/form-data"},
-        ).then(
-          (value) {
-            if (respond.statusCode == 200) {
-              print("Image Uploaded");
-            } else {
-              print("Upload Failed");
-            }
-          },
-        );
-      },
-    );
-  }
-
-  Future ApiaddData(PlatformFile? platformFile
-      // {
-      // String? name,
-      // String? tag,
-      // String? description,
-      // File? file,
-      // }
-      ) async {
-    String name = nameController.text;
-    String tag = tagController.text;
-    String description = descriptionController.text;
-
-    if (result != null) platformFile = result!.files.first;
-
-    final fileBytes = result!.files.first.bytes;
-    String fileName =
-        // basename(file.path!);
-        result!.files.first.name;
-
-    final contentType = mimeType != null ? MediaType.parse(mimeType) : null;
-
-    final stream = http.ByteStream.fromBytes(fileBytes!);
-
-    print('Name : ${fileName}');
-    print('Bytes : ${fileBytes}');
-    print('Size : ${platformFile!.size}');
-    print('Extension : ${platformFile.extension}');
-    // print('Path : ${platformFile!.path}');
-
-    print('picture ==> ${fileName}');
-
-    print('name : ${name}');
-    print('tag : ${tag}');
-    print('image_description : ${description}');
-    print('file : ${file}');
-    print('Topic ID : ${topic_id}');
-    print('User ID : ${user_id}');
+    print('Topic ID : $topic_id');
+    print('User ID : $user_id');
     // print('Token : ${token}');
     if (topic_id == "1") {
       print('### topic id ==> 1 ##### ');
-      print('## name ==> 1 ## : ${name}');
-      print('## tag ==> 1 ## : ${tag}');
-      print('## image_description ==> 1 ## : ${description}');
-      print('## file ==> 1 ## : ${fileName}');
-      print('## file ==> 1 ## : ${stream}');
+      print('## name ==> 1 ## : $name');
+      print('## tag ==> 1 ## : $tag');
+      print('## image_description ==> 1 ## : $description');
+      String path = '${hostInsert}/savefileImage2.php';
 
-      final urldata = Uri.parse(
-          "http://localhost/flutter_project_web_supportandservice/Backend/server/uptravel.php");
-      var request = http.MultipartRequest('POST', urldata);
-      request.headers['Access-Control-Allow-Origin'] = "*";
-      request.headers['Access-Control-Allow-Methods'] = "POST";
-      request.headers['Access-Control-Allow-Headers'] = "Content-Type";
-      request.fields['name'] = nameController.text;
-      request.fields['tag'] = tagController.text;
-      request.fields['description'] = descriptionController.text;
-      final multipartFile = http.MultipartFile(
-        'file',
-        stream,
-        platformFile.size,
-        filename: fileName,
-        contentType: contentType,
-      );
-      request.files.add(multipartFile);
-
-      print('Insert Request : ${request}');
-      await request.send().then(
-        (response) async {
-          print('Rsponse Status Code ==> ${response.statusCode}');
-        },
-      ).catchError(
-        (e) {
-          print(e);
+      String pathUser =
+          '${hostlogin}/getuserwhereuser.php?isAdd=true&user_id=$user_id';
+      await dio.get(pathUser).then(
+        (value) async {
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          String? user_id = preferences.getString('user_id');
+          int i = Random().nextInt(100000000);
+          String fileName = '$i.jpg';
+          Map<String, dynamic> map = Map();
+          map['file'] =
+              MultipartFile.fromBytes(_bytesImgData, filename: fileName);
+          FormData data = FormData.fromMap(map);
+          await dio
+              .post(
+            path,
+            data: data,
+          )
+              .then(
+            (value) {
+              dio.options.headers['content-Type'] = 'text/plain; charset=UTF-8';
+              dio.options.headers['Access-Control-Allow-Origin'] = '*';
+              dio.options.headers['Access-Control-Allow-Methods'] =
+                  'GET , POST';
+              print('Path Data ==> $fileName');
+              // image = 'Backend/server/Data/fileupload2/$fileName';
+              image = fileName;
+              print('image ==> $image');
+              String apiInsertData =
+                  '${hostInsert}/insert2.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
+              dio.get(apiInsertData).then(
+                (value) {
+                  if (value.toString() == 'true') {
+                    print('insert true');
+                    Navigator.pop(context);
+                  } else {
+                    print('fail upload');
+                  }
+                },
+              );
+            },
+          );
         },
       );
     } else if (topic_id == "2") {
       print('topic id ==> 2 : ');
+      print('### topic id ==> 2 ##### ');
+      print('## name ==> 2 ## : $name');
+      print('## tag ==> 2 ## : $tag');
+      print('## image_description ==> 2 ## : $description');
+      String path = '${hostInsert}/savefileImage.php';
+
+      String pathUser =
+          '${hostlogin}/getuserwhereuser.php?isAdd=true&user_id=$user_id';
+      await dio.get(pathUser).then(
+        (value) async {
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          String? user_id = preferences.getString('user_id');
+          int i = Random().nextInt(100000000);
+          String fileName = '$i.jpg';
+          Map<String, dynamic> map = Map();
+          map['file'] =
+              MultipartFile.fromBytes(_bytesImgData, filename: fileName);
+          FormData data = FormData.fromMap(map);
+          await dio
+              .post(
+            path,
+            data: data,
+          )
+              .then(
+            (value) {
+              dio.options.headers['content-Type'] = 'text/plain; charset=UTF-8';
+              dio.options.headers['Access-Control-Allow-Origin'] = '*';
+              dio.options.headers['Access-Control-Allow-Methods'] =
+                  'GET , POST';
+              print('Path Data ==> $fileName');
+              // image = 'Backend/server/Data/fileupload/$fileName';
+              image = fileName;
+              print('image ==> $image');
+              String apiInsertData =
+                  '${hostInsert}/insert.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
+              dio.get(apiInsertData).then(
+                (value) {
+                  if (value.toString() == 'true') {
+                    print('insert true');
+                  } else {
+                    print('fail upload');
+                  }
+                },
+              );
+            },
+          );
+        },
+      );
     } else if (topic_id == "3") {
       print('topic id ==> 3 : ');
+      print('### topic id ==> 3 ##### ');
+      print('## name ==> 3 ## : $name');
+      print('## tag ==> 3 ## : $tag');
+      print('## image_description ==> 3 ## : $description');
+      String path = '${hostInsert}/savefileImage3.php';
+
+      String pathUser =
+          '${hostlogin}/getuserwhereuser.php?isAdd=true&user_id=$user_id';
+      await dio.get(pathUser).then(
+        (value) async {
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          String? user_id = preferences.getString('user_id');
+          int i = Random().nextInt(100000000);
+          String fileName = '$i.jpg';
+          Map<String, dynamic> map = Map();
+          map['file'] =
+              MultipartFile.fromBytes(_bytesImgData, filename: fileName);
+          FormData data = FormData.fromMap(map);
+          await dio
+              .post(
+            path,
+            data: data,
+          )
+              .then(
+            (value) {
+              dio.options.headers['content-Type'] = 'text/plain; charset=UTF-8';
+              dio.options.headers['Access-Control-Allow-Origin'] = '*';
+              dio.options.headers['Access-Control-Allow-Methods'] =
+                  'GET , POST';
+              print('Path Data ==> $fileName');
+              // image = 'Backend/server/Data/fileupload3/$fileName';
+              image = fileName;
+              print('image ==> $image');
+              String apiInsertData =
+                  '${hostInsert}/insert3.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
+              dio.get(apiInsertData).then(
+                (value) {
+                  if (value.toString() == 'true') {
+                    print('insert true');
+                  } else {
+                    print('fail upload');
+                  }
+                },
+              );
+            },
+          );
+        },
+      );
     } else if (topic_id == "4") {
       print('topic id ==> 4 : ');
+      print('### topic id ==> 4 ##### ');
+      print('## name ==> 4 ## : $name');
+      print('## tag ==> 4 ## : $tag');
+      print('## image_description ==> 4 ## : $description');
+      String path = '${hostInsert}/savefileImage4.php';
+
+      String pathUser =
+          '${hostlogin}/getuserwhereuser.php?isAdd=true&user_id=$user_id';
+      await dio.get(pathUser).then(
+        (value) async {
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          String? user_id = preferences.getString('user_id');
+          int i = Random().nextInt(100000000);
+          String fileName = '$i.jpg';
+          Map<String, dynamic> map = Map();
+          map['file'] =
+              MultipartFile.fromBytes(_bytesImgData, filename: fileName);
+          FormData data = FormData.fromMap(map);
+          await dio
+              .post(
+            path,
+            data: data,
+          )
+              .then(
+            (value) {
+              dio.options.headers['content-Type'] = 'text/plain; charset=UTF-8';
+              dio.options.headers['Access-Control-Allow-Origin'] = '*';
+              dio.options.headers['Access-Control-Allow-Methods'] =
+                  'GET , POST';
+              print('Path Data ==> $fileName');
+              // image = 'Backend/server/Data/fileupload4/$fileName';
+              image = fileName;
+              print('image ==> $image');
+              String apiInsertData =
+                  '${hostInsert}/insert4.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
+              dio.get(apiInsertData).then(
+                (value) {
+                  if (value.toString() == 'true') {
+                    print('insert true');
+                  } else {
+                    print('fail upload');
+                  }
+                },
+              );
+            },
+          );
+        },
+      );
     }
   }
 
@@ -341,32 +484,29 @@ class _BodyState extends State<Body> {
         SharedPreferences preferences = await SharedPreferences.getInstance();
         String? user_id = preferences.getString('user_id');
 
-        if (result != null) platformFile = result!.files.first;
+        // if (result != null) platformFile = result!.files.first;
 
-        Uint8List? fileBytes = result!.files.first.bytes;
-        String fileName =
-            // basename(file.path!);
-            result!.files.first.name;
-        final contentType = mimeType != null ? MediaType.parse(mimeType) : null;
+        // Uint8List? fileBytes = result!.files.first.bytes;
+        // String fileName =
+        //     // basename(file.path!);
+        //     result!.files.first.name;
+        // final contentType = mimeType != null ? MediaType.parse(mimeType) : null;
 
-        final stream = http.ByteStream.fromBytes(fileBytes!);
+        // final stream = http.ByteStream.fromBytes(fileBytes!);
 
-        print('Name : ${fileName}');
-        print('Bytes : ${fileBytes}');
-        print('Size : ${platformFile!.size}');
-        print('Extension : ${platformFile!.extension}');
-        // print('Path : ${platformFile!.path}');
+        // print('Name : ${fileName}');
+        // print('Bytes : ${fileBytes}');
+        // print('Size : ${platformFile!.size}');
+        // print('Extension : ${platformFile!.extension}');
+        // // print('Path : ${platformFile!.path}');
 
-        print('picture ==> ${fileName}');
+        // print('picture ==> ${fileName}');
 
         //print('# user_id ==> $user_id');
         processInsertMySQL(
           name: name,
           tag: tag,
           description: description,
-
-          // image: image,
-          // file: file,
         );
         // print('Image ==> ${platformFile!.path}');
         // if (value.toString() != 'null') {
@@ -384,16 +524,16 @@ class _BodyState extends State<Body> {
         //       tag: tag,
         //       description: description);
         // } else {
-        //have image
-        print('process upload image');
-        print('Picture ==>$file ');
-        String apiSaveImage =
-            'http://localhost/flutter_project_web_supportandservice/Backend/server/uptravel.php?isAdd=true&image=$stream';
-        print('API Save Image ==> $apiSaveImage');
+        // have image
+        // print('process upload image');
+        // print('Picture ==>$file ');
+        // String apiSaveImage =
+        //     'http://localhost/flutter_project_web_supportandservice/Backend/server/uptravel.php?isAdd=true&image=$stream';
+        // print('API Save Image ==> $apiSaveImage');
         // int i = Random().nextInt(100000);
         // String nameImage = '$i.jpg';
 
-        Map<String, dynamic> map = Map();
+        // Map<String, dynamic> map = Map();
         // map['file'] =  http.MultipartFile.fromBytes(
         //     'image', File.fromUri(Uri.parse(apiSaveImage)).readAsBytesSync(),
         //     filename: file!.path, contentType: new MediaType('image', 'jpeg'));
@@ -407,35 +547,101 @@ class _BodyState extends State<Body> {
         // request.fields['name'] = nameController.text;
         // request.fields['tag'] = tagController.text;
         // request.fields['description'] = descriptionController.text;
-        map['file'] = http.MultipartFile(
-          'file',
-          stream,
-          platformFile!.size,
-          filename: fileName,
-          contentType: contentType,
-        );
+        // map['file'] = http.MultipartFile(
+        //   'file',
+        //   stream,
+        //   platformFile!.size,
+        //   filename: fileName,
+        //   contentType: contentType,
+        // );
         // request.files.add(multipartFile);
-        FormData data = FormData(map);
-        print('Data Form ==> ${data}');
-        await http.post(
-          Uri.parse(apiSaveImage),
-          body: data,
-          encoding: Encoding.getByName("utf-8"),
-          headers: {"Content-Type": "multipart/form-data"},
-        ).then(
+        // FormData data = FormData(map);
+        // print('Data Form ==> ${data}');
+        // await http.post(
+        //   Uri.parse(apiSaveImage),
+        //   body: data,
+        //   encoding: Encoding.getByName("utf-8"),
+        //   headers: {"Content-Type": "multipart/form-data"},
+        // ).then(
+        //   (value) {
+        //     image = 'Backend/server/Data/fileupload2/$file';
+        //     print('image ==> $image');
+        //     processInsertMySQL(
+        //       name: name,
+        //       tag: tag,
+        //       description: description,
+        //       image: image,
+        //     );
+        //   },
+        // );
+        // }
+        // // }
+      },
+    );
+  }
+
+  Future<void> insertDataImage(
+    Uint8List _bytesImgData,
+  ) async {
+    String name = nameController.text;
+    String tag = tagController.text;
+    String description = descriptionController.text;
+    String path =
+        'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/insertData/savefileImage2.php';
+
+    String pathUser =
+        'http://localhost/flutter_project_web_supportandservice/Backend/server/getuserwhereuser.php?isAdd=true&user_id=$user_id';
+    await dio.get(pathUser).then(
+      (value) async {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        String? user_id = preferences.getString('user_id');
+        int i = Random().nextInt(100000000);
+        String fileName = '$i.jpg';
+        Map<String, dynamic> map = Map();
+        map['file'] =
+            MultipartFile.fromBytes(_bytesImgData, filename: fileName);
+        FormData data = FormData.fromMap(map);
+        await dio
+            .post(
+          path,
+          data: data,
+        )
+            .then(
           (value) {
-            image = 'Backend/server/Data/fileupload2/$file';
+            dio.options.headers['content-Type'] = 'text/plain; charset=UTF-8';
+            dio.options.headers['Access-Control-Allow-Origin'] = '*';
+            dio.options.headers['Access-Control-Allow-Methods'] = 'GET , POST';
+            print('Path Data ==> $fileName');
+            image = 'Backend/server/Data/fileupload2/$fileName';
             print('image ==> $image');
-            processInsertMySQL(
-              name: name,
-              tag: tag,
-              description: description,
-              image: image,
+            String apiInsertData =
+                'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/insertData/insert2.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
+            dio.get(apiInsertData).then(
+              (value) {
+                if (value.toString() == 'true') {
+                  print('insert true');
+                } else {
+                  print('fail upload');
+                }
+              },
             );
           },
         );
-        // }
-        // }
+        // showDialog(
+        //   context: context,
+        //   builder: (context) => const AlertDialog(
+        //     scrollable: true,
+        //     title: Text('เพิ่มรูปภาพสำเร็จ'),
+        //     content: Text('เพิ่มรูปภาพสำเร็จ'),
+        //   ),
+        // );
+
+        // showDialog(
+        //     context: context,
+        //     builder: (context) => AlertDialog(
+        //           scrollable: true,
+        //           title: Text(e.toString()),
+        //         ));
       },
     );
   }
@@ -444,198 +650,88 @@ class _BodyState extends State<Body> {
     String? name,
     String? tag,
     String? description,
-    String? image,
-    // File? file,
   }) async {
-    print('processInsertMySQL Work and Image ==> $file');
+    print('processInsertMySQL Work and Image ==> $image');
     String apiInsertData =
         'http://localhost/flutter_project_web_supportandservice/Backend/server/insert.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
-    await http.get(
-      Uri.parse(apiInsertData),
-      headers: {"Content-Type": "multipart/form-data"},
-    ).then(
+    await dio.get(apiInsertData).then(
       (value) {
         if (value.toString() == 'true') {
-          // Navigator.pop(context);
           print('insert true');
         } else {
-          // normalDialog(context, 'ข้อมูลไม่ถูกต้อง ', 'ไม่สามารถอัพโหลดข้อมูลได้');
           print('fail upload');
         }
       },
     );
   }
 
-  Future upload() async {
-    String name = nameController.text;
-    String tag = tagController.text;
-    String description = descriptionController.text;
+  Future<Null> upload() async {
+    // String name = nameController.text;
+    // String tag = tagController.text;
+    // String description = descriptionController.text;
+    String apiSaveImage =
+        'http://localhost/flutter_project_web_supportandservice/Backend/server/savefileImage.php';
     // File? file;
-    print(
-        '## userid = $user_id, namepicture = $name, tag = $tag, name = $description,');
-    print('picture ==> $file');
-    String urlupload =
-        'http://localhost/flutter_project_web_supportandservice/Backend/server/uploadimage.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
 
-    // List<int> imageBytes = file!.readAsBytesSync();
-    // String baseimage = base64Encode(imageBytes);
-    //convert file image to Base64 encoding
-    var response = await http.post(
-      Uri.parse(urlupload),
-      body: {
-        'image': file.toString(),
-      },
+    // SharedPreferences preferences = await SharedPreferences.getInstance();
+    // String? user_id = preferences.getString('user_id');
+    // print('Picture ==>$user_id ');
+    // print('process upload image');
+    // print('Picture ==>${file!.path}} ');
+
+    // print('API Save Image ==> $apiSaveImage');
+    int i = Random().nextInt(100000);
+    String nameImage = '$i.jpg';
+
+    Map<String, dynamic> map = Map();
+    map['file'] = await MultipartFile.fromFile(
+      file!.path,
+      filename: nameImage,
     );
-    if (response.statusCode == 200) {
-      var jsondata = json.decode(response.body); //decode json data
-      if (jsondata["error"]) {
-        //check error sent from server
-        print(jsondata["msg"]);
-        //if error return from server, show message from server
-      } else {
-        print("Upload successful");
-      }
-    } else {
-      print("Error during connection to server");
-      //there is error during connecting to server,
-      //status code might be 404 = url not found
-    }
+    FormData data = FormData.fromMap(map);
+    // print('Data Form ==> ${data}');
+    await Dio().post(apiSaveImage, data: data).then((value) {
+      print(value);
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title:
+                    Column(children: [Text(value.data["message"].toString())]),
+              ));
+      // image = 'Backend/server/Data/fileupload2/$nameImage';
+      // print('image ==> $image');
+      // processInsertMySQL(
+      //   name: name,
+      //   tag: tag,
+      //   description: description,
+      //   image: image,
+      // );
+    });
   }
 
-  // Future uploadImage() async {
-  //   String name = nameController.text;
-  //   String tag = tagController.text;
-  //   String description = descriptionController.text;
-  //   print(
-  //       '## userid = $user_id, namepicture = $name, tag = $tag, name = $description,');
-  //   print('picture ==> $file');
-  //   // try {
-  //   String apiInsertData =
-  //       'http://localhost/flutter_project_web_supportandservice/Backend/server/insert.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
-  //   String fileName = basename(file!.path);
-  //   // read file as Uint8List
-  //   Uint8List content = await file!.readAsBytes();
-  //   var request = new http.MultipartRequest("POST", Uri.parse(apiInsertData));
-  //   request.headers['X-MS-BLOB-TYPE'] = 'BlockBlob';
-  //   request.headers['Content-Type'] = 'image/jpeg';
-  //   request.files.add(
-  //     new http.MultipartFile.fromBytes(
-  //       'file',
-  //       await file!.readAsBytes(),
-  //     ),
-  //   );
-  //   request.send().then(
-  //     (response) {
-  //       // request.add(response.statusCode);
-  //     },
-  //     onError: (err) {
-  //       print(err);
-  //     },
-  //   );
-  // }
+  Future pickerimage(ImageSource imageSource) async {
+    try {
+      var myfile = await ImagePicker().pickImage(
+        source: imageSource,
+        maxHeight: 50.0,
+        maxWidth: 50.0,
+      );
 
-  void openFile(PlatformFile file) {
-    OpenFile.open(file.path!);
+      setState(
+        () {
+          print(myfile);
+          if (myfile != null) {
+            file = File(myfile.path);
+            print('Selected image = $file');
+            // String filename = basename(myfile.path);
+            // uploadFile(filename, image);
+          } else {
+            print('No image selected.');
+          }
+        },
+      );
+    } catch (e) {}
   }
-
-  Future pickerimage() async {
-    //  FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
-    //   if (result == null) return;
-    //   file = result.files.first;
-    //   setState(() {});
-    // try {
-    // final PickedFile? myfile = await ImagePicker().getImage(
-    //   source: source,
-    //   maxHeight: 50.0,
-    //   maxWidth: 50.0,
-    // );
-    result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      withData: true,
-      allowMultiple: true,
-      withReadStream: false,
-      lockParentWindow: true,
-    );
-
-    if (result != null) {
-      platformFile = result!.files.first;
-      // openFile(file);
-      Uint8List? fileBytes = result!.files.first.bytes;
-      String fileName =
-          // basename(file.path!);
-          result!.files.first.name;
-
-      //   print('Name:${fileName}');
-      //   print('Bytes:${fileBytes}');
-      //   print('Size:${platformFile!.size}');
-      //   print('Extension:${platformFile!.extension}');
-      // print('Path:${platformFile!.path}');
-      // uploadImageAndInsertData(platformFile);
-      // final newFile = await saveFilePermanently(file);
-      // print('From Path : ${file.path}');
-      // print('To Path : ${newFile.path}');
-    }
-    // setState(
-    //   () {
-    //     // if (myfile != null) {
-    //     file = File(myfile!.path);
-    //     // file = Image.network(myfile!.path) as File?;
-    //     // String filename = basename(myfile.path);
-    //     // uploadFile(filename, image);
-    //     print('Selected image = $file');
-    //     // } else {
-    //     //   print('No image selected.');
-    //     // }
-    //   },
-    // );
-    // } catch (e) {}
-    //  });
-  }
-
-  // Future pickerimage(ImageSource imageSource) async {
-  // FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //   type: FileType.image,
-  //   withData: true,
-  //   allowMultiple: true,
-  //   withReadStream: false,
-  //   lockParentWindow: true,
-  // );
-  // ignore: deprecated_member_use
-  // final PickedFile? myfile = await ImagePicker().getImage(
-  //   source: imageSource,
-  //   maxHeight: 50.0,
-  //   maxWidth: 50.0,
-  // );
-  //   // if (result != null) {
-  //   //   PlatformFile _file = result.files.first;
-  //   //   // openFile(file);
-  //   //   Uint8List? fileBytes = result.files.first.bytes;
-  //   //   String fileName =
-  //   //       // basename(file.path!);
-  //   //       result.files.first.name;
-
-  //   //   print('Name:${fileName}');
-  //   //   print('Bytes:${fileBytes}');
-  //   //   print('Size:${_file.size}');
-  //   //   print('Extension:${_file.extension}');
-  //   //   // print('Path:${file!.path}');
-  //   //   // final newFile = await saveFilePermanently(file);
-  //   //   // print('From Path : ${file.path}');
-  //   //   // print('To Path : ${newFile.path}');
-  //   // }
-  //   setState(
-  //     () {
-  //       if (myfile != null) {
-  //         file = File(myfile.path);
-  //         print('Selected image = $file');
-  //         // String filename = basename(myfile.path);
-  //         // uploadFile(filename, image);
-  //       } else {
-  //         print('No image selected.');
-  //       }
-  //     },
-  //   );
-  // }
 
   Widget showImage(BuildContext context) {
     // ignore: unused_local_variable
@@ -654,7 +750,7 @@ class _BodyState extends State<Body> {
                 borderRadius: BorderRadius.circular(7.0),
                 border: Border.all(color: Colors.black45, width: 1.2),
               ),
-              child: image == null
+              child: _bytesData == null
                   ? Text(
                       "กรุณากดปุ่ม"
                       "อัพโหลด"
@@ -674,7 +770,9 @@ class _BodyState extends State<Body> {
                         borderRadius: BorderRadius.circular(7.0),
                         border: Border.all(color: Colors.black45, width: 1),
                       ),
-                      child: Image.network(image!),
+                      child: Image.memory(
+                        _bytesData!,
+                      ),
                     ),
             ),
           ),
@@ -964,18 +1062,14 @@ class _BodyState extends State<Body> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               showImage(context),
-                              // if (file != null) fileDetails(file!),
                               SizedBox(height: size.height * 0.03),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // if (file != null)
                                   MaterialButton(
-                                    onPressed: () async {
-                                      choiceImage();
-                                    },
+                                    onPressed: () => startWebFilePicker(),
                                     color: Colors.grey.shade400,
                                     height: 45,
                                     shape: RoundedRectangleBorder(
@@ -1012,15 +1106,13 @@ class _BodyState extends State<Body> {
                                       // provider.
                                       if (_formKey.currentState!.validate()) {
                                         if (name == null ||
-                                                name.isEmpty ||
-                                                // ignore: unnecessary_null_comparison
-                                                tag == null ||
-                                                tag.isEmpty ||
-                                                description == null ||
-                                                description.isEmpty
-                                            // file == null ||
-                                            // file!.isAbsolute
-                                            ) {
+                                            name.isEmpty ||
+                                            tag == null ||
+                                            tag.isEmpty ||
+                                            description == null ||
+                                            description.isEmpty ||
+                                            _selectedFile == null ||
+                                            _selectedFile!.isEmpty) {
                                           normalDialog(
                                               context,
                                               'ไม่สามารถบันทึกข้อมูลได้',
@@ -1031,12 +1123,15 @@ class _BodyState extends State<Body> {
                                           //       'ไม่สามารถอัพโหลดได้',
                                           //       'กรุณากรอกข้อมูลให้ครบถ้วน');
                                         } else {
-                                          addCategory();
+                                          // insertDataImage(_bytesData!);
+                                          ApiaddData(_bytesData!);
+                                          // addCategory();
                                           // ApiaddData(platformFile);
                                           // uploadImageAndInsertData(
                                           //     platformFile);
                                           // add(file!);
                                           // upload();
+                                          // insertImage(file: file!);
                                         }
                                       }
                                     },
@@ -1053,213 +1148,6 @@ class _BodyState extends State<Body> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget fileDetails(PlatformFile file) {
-    final kb = file.size / 1024;
-    final mb = kb / 1024;
-    final size = (mb >= 1)
-        ? '${mb.toStringAsFixed(2)} MB'
-        : '${kb.toStringAsFixed(2)} KB';
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('File Name: ${file.name}'),
-          Text('File Size: $size'),
-          Text('File Extension: ${file.extension}'),
-          Text('File Path: ${file.path}'),
-        ],
-      ),
-    );
-  }
-
-  Future<File> saveFilePermanently(PlatformFile file) async {
-    final appStorage = '/Backend/server/Data/fileupload2/';
-    // ignore: unnecessary_brace_in_string_interps
-    final newFile = File('${appStorage}/${file.name}');
-
-    return File(file.path!).copy(newFile.path);
-  }
-
-  // void openFiles(PlatformFile files)=>Navigator.of(context).push(MaterialPageRoute(builder: (context)=>));
-  // void processAddImage() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     bool checkFile = true;
-  //     for (var item in file) {
-  //       if (item == null) {
-  //         checkFile = false;
-  //       }
-  //     }
-  //     if (checkFile) {
-  //       print('choose image success');
-  //     } else {
-  //       normalDialog(context, 'More image', 'Please Choose More Image');
-  //     }
-  //   }
-  // }
-
-  Widget buildDescription(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Form(
-      key: _formKey,
-      child: Container(
-        width: size.width * 0.28,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'คำอธิบายรูปภาพ',
-              style: GoogleFonts.kanit(
-                textStyle: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              controller: descriptionController, autocorrect: true,
-              keyboardType: TextInputType.multiline,
-              textAlign: TextAlign.start, maxLines: 12,
-              // obscureText: true,
-              decoration: InputDecoration(
-                // contentPadding: EdgeInsets.fromLTRB(10, 50, 10, 50),
-                isDense: true,
-                errorStyle: GoogleFonts.kanit(
-                  textStyle: TextStyle(
-                    color: Colors.red.shade400,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                hintText: "กรุณากรอกคำอธิบายรูปภาพ",
-                hintStyle: GoogleFonts.kanit(
-                  textStyle: TextStyle(fontSize: 18),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Colors.black54,
-                    width: 1,
-                  ),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildname(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Form(
-      key: _formKey,
-      child: Container(
-        width: size.width * 0.28,
-        // height: size.height * 0.1,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'ชื่อรูปภาพ',
-              style: GoogleFonts.kanit(
-                textStyle: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              controller: nameController, autocorrect: true,
-              // obscureText: true,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                isDense: true,
-                errorStyle: GoogleFonts.kanit(
-                  textStyle: TextStyle(
-                    color: Colors.red.shade400,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                labelText: "กรอกชื่อรูปภาพ",
-                labelStyle: GoogleFonts.kanit(
-                  textStyle: TextStyle(fontSize: 18),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Colors.black54,
-                    width: 1,
-                  ),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildTag(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Form(
-      key: _formKey,
-      child: Container(
-        width: size.width * 0.28,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'แฮชแท็ก',
-              style: GoogleFonts.kanit(
-                textStyle: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              controller: tagController, autocorrect: true,
-              // obscureText: true,
-              decoration: InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                errorStyle: GoogleFonts.kanit(
-                  textStyle: TextStyle(
-                    color: Colors.red.shade400,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                labelText: "กรอกข้อมูลแฮชแท็ก",
-                labelStyle: GoogleFonts.kanit(
-                  textStyle: TextStyle(fontSize: 18),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Colors.black54,
-                    width: 1,
-                  ),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-          ],
         ),
       ),
     );

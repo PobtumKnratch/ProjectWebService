@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
@@ -7,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_project_web_supportandservice/Model/fileupload2.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
+import '../../widget/constants.dart';
 
 class Travel extends StatefulWidget {
   const Travel({
@@ -31,16 +35,12 @@ class _TravelState extends State<Travel> {
     setState(() {
       loading = true;
     });
-    await Future.delayed(Duration(milliseconds: 500));
-    List<String> newData = upload2.length >= 60
-        ? []
-        : List.generate(20, (index) => "List Upload ${index + upload2.length}");
-    if (newData.isNotEmpty) {
-      upload2.addAll(newData);
-    }
+    // await Future.delayed(Duration(milliseconds: 500));
+    upload2 =  List.generate(20, (index) => "List Upload ${index + upload2.length}");
+    
     setState(() {
       loading = false;
-      allLoaded = newData.isEmpty;
+      allLoaded = upload2.isEmpty;
     });
   }
 
@@ -57,17 +57,7 @@ class _TravelState extends State<Travel> {
     });
   }
 
-  Future<List<Upload2>> getupload2() async {
-    final url =
-        'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/ShowData/fileupload2.php';
-    final response = await http.get(Uri.parse(url));
-    print(response);
-    if (response.statusCode == 200) {
-      return upload2FromJson(response.body);
-    } else {
-      throw Exception(response.hashCode);
-    }
-  }
+  
 
   @override
   void dispose() {
@@ -871,7 +861,8 @@ class _TravelState extends State<Travel> {
                           Padding(
                             padding: EdgeInsets.only(
                                 top: size.height * 0.001,
-                                left: size.height * 0.02,bottom: size.height*0.03),
+                                left: size.height * 0.02,
+                                bottom: size.height * 0.03),
                             child: Text(
                               'Golfy.theerawee@gmail.com',
                               style: GoogleFonts.kanit(
@@ -882,7 +873,8 @@ class _TravelState extends State<Travel> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
                               // top: size.height * 0.02,
                               // left: size.height * 0.25,
                             ),
@@ -926,8 +918,8 @@ class _TravelState extends State<Travel> {
                                     "วันที่ : ",
                                     style: GoogleFonts.kanit(
                                       textStyle: TextStyle(
-                                          fontSize: 10,
-                                          ),
+                                        fontSize: 10,
+                                      ),
                                     ),
                                     textAlign: TextAlign.left,
                                   ),
@@ -939,8 +931,8 @@ class _TravelState extends State<Travel> {
                                   uploaddate.toString(),
                                   style: GoogleFonts.kanit(
                                     textStyle: TextStyle(
-                                        fontSize: 10,
-                                        ),
+                                      fontSize: 10,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -967,8 +959,8 @@ class _TravelState extends State<Travel> {
                                     "คำอธิบายรูปภาพ",
                                     style: GoogleFonts.kanit(
                                       textStyle: TextStyle(
-                                          fontSize: 10,
-                                          ),
+                                        fontSize: 10,
+                                      ),
                                     ),
                                     textAlign: TextAlign.left,
                                   ),
@@ -997,8 +989,8 @@ class _TravelState extends State<Travel> {
                                     uploadname,
                                     style: GoogleFonts.kanit(
                                       textStyle: TextStyle(
-                                          fontSize: 10,
-                                          ),
+                                        fontSize: 10,
+                                      ),
                                     ),
                                     textAlign: TextAlign.left,
                                   ),
@@ -1075,8 +1067,7 @@ class _TravelState extends State<Travel> {
                                                         child:
                                                             CachedNetworkImage(
                                                           placeholder:
-                                                              (context,
-                                                                      url) =>
+                                                              (context, url) =>
                                                                   Center(
                                                             child:
                                                                 CircularProgressIndicator(),
@@ -1086,15 +1077,13 @@ class _TravelState extends State<Travel> {
                                                           fit: BoxFit.cover,
                                                           width: size.width,
                                                           height: size.height,
-                                                          errorWidget:
-                                                              (context, url,
-                                                                      error) =>
-                                                                  Image.asset(
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Image.asset(
                                                             'images/picturecontent/travel.jpg',
                                                             fit: BoxFit.cover,
                                                             width: size.width,
-                                                            height:
-                                                                size.height,
+                                                            height: size.height,
                                                           ),
                                                         ),
                                                       ),
@@ -1148,9 +1137,14 @@ class _TravelState extends State<Travel> {
                                                       //   backgroundImage: AssetImage(post.userImg),
                                                       // ),
                                                       const SizedBox(
-                                                          width: AppConst
-                                                              .padding),
-                                                      Text('${upload.name}',style: GoogleFonts.kanit(fontSize: 8),),
+                                                          width:
+                                                              AppConst.padding),
+                                                      Text(
+                                                        '${upload.name}',
+                                                        style:
+                                                            GoogleFonts.kanit(
+                                                                fontSize: 8),
+                                                      ),
                                                       const Spacer(),
                                                       Row(
                                                         children: [
@@ -1169,8 +1163,8 @@ class _TravelState extends State<Travel> {
                                                           const Icon(
                                                             Icons
                                                                 .chat_bubble_outline_rounded,
-                                                            color:
-                                                                Colors.black,size: 8,
+                                                            color: Colors.black,
+                                                            size: 8,
                                                           ),
                                                           const SizedBox(
                                                               width: AppConst

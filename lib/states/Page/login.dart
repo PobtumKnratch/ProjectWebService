@@ -1,10 +1,11 @@
+// ignore_for_file: non_constant_identifier_names, unused_shown_name
+
 import 'dart:convert' show ascii, base64, json, jsonDecode, jsonEncode;
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/Model/user_login.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/states/Page/homeuser.dart';
-import 'package:flutter_project_web_supportandservice/states/Page/homeuseranno.dart';
 import 'package:flutter_project_web_supportandservice/states/Page/homeuseredit.dart';
 import 'package:flutter_project_web_supportandservice/widget/dialog.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -63,57 +64,7 @@ class _BodyState extends State<Body> {
     super.initState();
     checkAuthen();
   }
-
-  // Future apilogin({String? password, String? username}) async {
-  //   var url =
-  //       "http://localhost/flutter_project_web_supportandservice/Backend/server/api_login.php?isAdd=true&username=$username";
-  //   var resApi = await http.post(
-  //     Uri.parse(url),
-  //     headers: {
-  //       HttpHeaders.AUTHORIZATION: '${token}',
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //       // 'Authorization': 'Bearer $token',
-  //     },
-  //     body: jsonEncode(
-  //       <String, String>{
-  //         "username": usernameController.text,
-  //         "password": passwordController.text,
-  //       },
-  //     ),
-  //   );
-  //   print(resApi.statusCode);
-  //   var body = jsonDecode(resApi.body);
-  //   print(body);
-  //   if (resApi.statusCode == 200) {
-  //     final snackBar =
-  //         SnackBar(content: Text('${usernameController} is Logged In'));
-  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  //     Fluttertoast.showToast(
-  //       msg: 'Login Success',
-  //       gravity: ToastGravity.CENTER_RIGHT,
-  //       toastLength: Toast.LENGTH_LONG,
-  //     );
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => HomeUser(),
-  //       ),
-  //     );
-  //   } else {
-  //     Fluttertoast.showToast(
-  //       msg: 'Login Failed',
-  //       gravity: ToastGravity.CENTER_RIGHT,
-  //       toastLength: Toast.LENGTH_LONG,
-  //     );
-  //   }
-  //   // }
-  //   print(resApi.body);
-  //   // print(usernameController.text);
-  //   // print(passwordController.text);
-  //   print(resApi.statusCode);
-  // }
-
+  
   Future checkAuthen({String? password, String? username}) async {
     // try {
     var data = <String, String>{
@@ -125,6 +76,7 @@ class _BodyState extends State<Body> {
     http.Response response = await http.post(
       Uri.parse(url),
       headers: {
+        // ignore: deprecated_member_use, unnecessary_brace_in_string_interps
         HttpHeaders.AUTHORIZATION: '${token}',
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -135,16 +87,19 @@ class _BodyState extends State<Body> {
     if (response.statusCode == 200) {
       // print(response.body);
       Map<String, dynamic> map = json.decode(response.body);
+      // ignore: unnecessary_brace_in_string_interps
       print('Map Data : ${map}');
       Userlogin userlogin = Userlogin.fromJson(map);
       String token = userlogin.token.toString();
       SharedPreferences preferences = await SharedPreferences.getInstance();
       preferences.setString('jwt', token);
+      // ignore: unused_local_variable
       final counter = preferences.getString('jwt') ?? 0;
       // print('Counter Token ${counter}');
       String? password = userlogin.password;
       if (password != null) {
         String? user_status = userlogin.user_status;
+        // ignore: unnecessary_brace_in_string_interps
         print('User Status ${user_status}');
         if (user_status == 'US') {
           Fluttertoast.showToast(
@@ -160,13 +115,13 @@ class _BodyState extends State<Body> {
             toastLength: Toast.LENGTH_LONG,
           );
           routeService(HomeUserEdit(), userlogin);
-        } else if (user_status == 'AN') {
-          Fluttertoast.showToast(
-            msg: 'เข้าสู่ระบบสำเร็จ ข้อมูลผู้ใช้ตรวจสอบข้อมูลรูปภาพ',
-            gravity: ToastGravity.CENTER_RIGHT,
-            toastLength: Toast.LENGTH_LONG,
-          );
-          routeService(HomeUserAnno(), userlogin);
+        // } else if (user_status == 'AN') {
+        //   Fluttertoast.showToast(
+        //     msg: 'เข้าสู่ระบบสำเร็จ ข้อมูลผู้ใช้ตรวจสอบข้อมูลรูปภาพ',
+        //     gravity: ToastGravity.CENTER_RIGHT,
+        //     toastLength: Toast.LENGTH_LONG,
+        //   );
+        //   routeService(HomeUserAnno(), userlogin);
         } else {
           Fluttertoast.showToast(
             msg: 'ไม่พบข้อมูลผู้ใช้',
@@ -193,7 +148,7 @@ class _BodyState extends State<Body> {
 
   Future<Null> routeService(Widget myWidget, Userlogin userlogin) async {
     String user_id = userlogin.user_id.toString();
-    String username = userlogin.username.toString();
+    String username = userlogin.username.toString();    
     String topic_id = userlogin.topic_id.toString();
     String firstname = userlogin.firstname.toString();
     String email = userlogin.email.toString();

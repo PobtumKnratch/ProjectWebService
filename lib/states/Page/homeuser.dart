@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
-import 'package:flutter_project_web_supportandservice/states/Category/Categories.dart';
 import 'package:flutter_project_web_supportandservice/states/components/home/carousel.dart';
 import 'package:flutter_project_web_supportandservice/states/components/home/detail.dart';
 import 'package:flutter_project_web_supportandservice/widget/bottom_bar.dart';
 import 'package:flutter_project_web_supportandservice/widget/draweruser.dart';
 import 'package:flutter_project_web_supportandservice/widget/featured_heading.dart';
-import 'package:flutter_project_web_supportandservice/widget/featured_list.dart';
 import 'package:flutter_project_web_supportandservice/widget/featured_tiles.dart';
 import 'package:flutter_project_web_supportandservice/widget/headeruser.dart';
 import 'package:flutter_project_web_supportandservice/widget/main_heading.dart';
 import 'package:flutter_project_web_supportandservice/widget/max_width_contanier.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class HomeUser extends StatelessWidget {
   static const String routeName = '/homeuser';
   double _scrollPosition = 0;
@@ -85,9 +84,11 @@ class HomeUser extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isMobileContent extends StatelessWidget {
   isMobileContent({Key? key}) : super(key: key);
   double _scrollPosition = 0;
+  // ignore: unused_field
   double _opacity = 0;
 
   @override
@@ -127,9 +128,11 @@ class isMobileContent extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isTabletContent extends StatelessWidget {
   isTabletContent({Key? key}) : super(key: key);
   double _scrollPosition = 0;
+  // ignore: unused_field
   double _opacity = 0;
 
   @override
@@ -169,9 +172,12 @@ class isTabletContent extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isDesktopContent extends StatelessWidget {
   isDesktopContent({Key? key}) : super(key: key);
+  // ignore: unused_field
   double _scrollPosition = 0;
+  // ignore: unused_field
   double _opacity = 0;
 
   @override

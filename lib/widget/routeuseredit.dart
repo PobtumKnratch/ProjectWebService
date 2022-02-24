@@ -4,6 +4,7 @@ import 'package:flutter_project_web_supportandservice/states/Page/login.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editdata.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/useredit_picture.dart';
 
+// ignore: camel_case_types
 class routeuseredit {
   static const String login = LoginPage.routeName;
   static const String homeuseredit = HomeUserEdit.routeName;

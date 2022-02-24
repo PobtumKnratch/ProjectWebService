@@ -33,6 +33,8 @@ class _DatatoSearchState extends State<DatatoSearch> {
   final formKey = GlobalKey<FormState>();
   List upload2 = [];
 
+  String? searchStatus;
+
   Future getupload2() async {
     final url =
         'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/ShowData/fileupload2.php';
@@ -65,6 +67,22 @@ class _DatatoSearchState extends State<DatatoSearch> {
     super.initState();
     getupload2();
   }
+
+  // void funSearch({String? value}) {
+  //   List show = upload2;
+  //   setState(() {
+  //     show = show
+  //         .where((element) => element.Status.toLowerCase()
+  //             .contains(searchStatus!.toLowerCase()))
+  //         .toList();
+  //     if (value == null ? false : true && value != '') {
+  //       value = value!.toLowerCase();
+  //       show = show.where((element) => element.Name.toLowerCase().contains(value!) || 
+  //       element.Feature.toLowerCase().contains(value!) || 
+  //       (element.upload2 == ''))
+  //     }
+  //   });
+  // }
 
   Widget travel(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -516,8 +534,6 @@ class _DatatoSearchState extends State<DatatoSearch> {
     setState(() => upload2 = suggestions);
   }
 }
-
-
 
 class Search extends SearchDelegate<String> {
   List<dynamic>? list;

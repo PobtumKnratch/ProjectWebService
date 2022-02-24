@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_web_supportandservice/widget/constants.dart';
 import 'package:flutter_project_web_supportandservice/widget/max_width_contanier.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_project_web_supportandservice/Model/fileupload4.dart';
 
 class ScenarioSearch extends StatefulWidget {
@@ -20,7 +20,7 @@ class _ScenarioSearchState extends State<ScenarioSearch> {
   double _scrollPosition = 0;
   double _opacity = 0;
 
-  mockFetch() async {
+ mockFetch() async {
     if (allLoaded) {
       return;
     }
@@ -59,17 +59,6 @@ class _ScenarioSearchState extends State<ScenarioSearch> {
     _scrollController.dispose();
   }
 
-  Future<List<Upload4>> getupload() async {
-    final url =
-        'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/ShowData/fileupload4.php';
-    final response = await http.get(Uri.parse(url));
-    print(response);
-    if (response.statusCode == 200) {
-      return upload4FromJson(response.body);
-    } else {
-      throw Exception(response.hashCode);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +132,7 @@ class _ScenarioSearchState extends State<ScenarioSearch> {
           Container(
             height: size.height,
             child: FutureBuilder<List<Upload4>>(
-              future: getupload(),
+              future: getupload4(),
               builder: (context, snapshot) {
                 if (upload4.isNotEmpty) {
                   return StaggeredGridView.countBuilder(

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/states/Category/Categories.dart';
@@ -41,6 +43,7 @@ class UserEditPicture extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isMobileContent extends StatelessWidget {
   isMobileContent({Key? key}) : super(key: key);
   double _scrollPosition = 0;
@@ -56,6 +59,7 @@ class isMobileContent extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isTabletContent extends StatelessWidget {
   isTabletContent({Key? key}) : super(key: key);
   double _scrollPosition = 0;
@@ -71,9 +75,12 @@ class isTabletContent extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isDesktopContent extends StatelessWidget {
   isDesktopContent({Key? key}) : super(key: key);
+
   double _scrollPosition = 0;
+
   double _opacity = 0;
 
   @override

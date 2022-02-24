@@ -1,6 +1,6 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
-import 'package:meta/meta.dart';
-import 'package:flutter/material.dart';
 
 List<User> usersFormJson(String str) =>
     List<User>.from(json.decode(str).map((x) => User.fromJson(x)));

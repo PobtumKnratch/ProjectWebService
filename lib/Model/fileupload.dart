@@ -1,35 +1,101 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
-List<Upload> uploadFromJson(String str) =>
-    List<Upload>.from(json.decode(str).map((x) => Upload.fromJson(x)));
-
-String uploadToJson(List<Upload> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class Upload {
+  String id;
+  String user_id;
+  String name;
+  String description;
+  String image;
+  String date;
+  String tag;
   Upload({
-     required this.id,
-     required this.name,
-     required this.image,
-     required this.date,
+    required this.id,
+    required this.user_id,
+    required this.name,
+    required this.description,
+    required this.image,
+    required this.date,
+    required this.tag,
   });
 
-  String id;
-  String name;
-  String image;
-  DateTime date;
+  Upload copyWith({
+    String? id,
+    String? user_id,
+    String? name,
+    String? description,
+    String? image,
+    String? date,
+    String? tag,
+  }) {
+    return Upload(
+      id: id ?? this.id,
+      user_id: user_id ?? this.user_id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      image: image ?? this.image,
+      date: date ?? this.date,
+      tag: tag ?? this.tag,
+    );
+  }
 
-  factory Upload.fromJson(Map<String, dynamic> json) => Upload(
-        id: json["id"],
-        name: json["name"],
-        image: json["image"],
-        date: DateTime.parse(json["date"]),
-      );
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'user_id': user_id,
+      'name': name,
+      'description': description,
+      'image': image,
+      'date': date,
+      'tag': tag,
+    };
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "image": image,
-        "date": date.toIso8601String(),
-      };
+  factory Upload.fromMap(Map<String, dynamic> map) {
+    return Upload(
+      id: map['id'] ?? '',
+      user_id: map['user_id'] ?? '',
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      image: map['image'] ?? '',
+      date: map['date'] ?? '',
+      tag: map['tag'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Upload.fromJson(String source) =>
+      Upload.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Upload(id: $id, user_id: $user_id, name: $name, description: $description, image: $image, date: $date, tag: $tag)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Upload &&
+        other.id == id &&
+        other.user_id == user_id &&
+        other.name == name &&
+        other.description == description &&
+        other.image == image &&
+        other.date == date &&
+        other.tag == tag;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        user_id.hashCode ^
+        name.hashCode ^
+        description.hashCode ^
+        image.hashCode ^
+        date.hashCode ^
+        tag.hashCode;
+  }
 }

@@ -1,12 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:flutter_project_web_supportandservice/Model/response.dart';
-import 'package:flutter_project_web_supportandservice/Model/user_login.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/Model/user_food_log.dart';
-import 'package:flutter_project_web_supportandservice/Model/user_info.dart';
 import 'package:flutter_project_web_supportandservice/states/components/home/data_search.dart';
-import 'package:flutter_project_web_supportandservice/states/components/user/datatosearch.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -40,6 +39,7 @@ class _SearchandserviceState extends State<Searchandservice> {
     _scrollController.dispose();
   }
 
+  // ignore: unused_element
   static Future<List<Response>> getLocally(BuildContext context) async {
     final assetBundle = DefaultAssetBundle.of(context);
     final data = await assetBundle.loadString('lib/assets/response.json');
@@ -62,6 +62,7 @@ class _SearchandserviceState extends State<Searchandservice> {
   Future getFood() async {
     try {
       final url = 'http://localhost/Project_flutter_nectec/user_food_log.php';
+      // ignore: non_constant_identifier_names
       final Foods = await http.get(
         Uri.parse(url),
         headers: {
@@ -107,6 +108,7 @@ class _SearchandserviceState extends State<Searchandservice> {
   }
 
   Widget showImage() {
+    // ignore: unused_local_variable
     double size = MediaQuery.of(context).size.height * 0.4;
     return Responsive(
       mobile: Container(
@@ -309,6 +311,7 @@ class _SearchandserviceState extends State<Searchandservice> {
   }
 
   void searchupload(String query) {
+    // ignore: unused_local_variable
     final suggestions = upload2.where((upload) {
       final uploadname = upload.name.toLowerCase();
       final input = query.toLowerCase();
@@ -364,6 +367,7 @@ class _SearchandserviceState extends State<Searchandservice> {
                             style: GoogleFonts.kanit(
                               textStyle: TextStyle(fontSize: 11, height: 3.7),
                             ),
+                            // ignore: body_might_complete_normally_nullable
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return '    กรุณากรอกข้อมูลที่ใช้สำหรับการค้นหาชื่อสถานที่ , ชื่ออาหารหรือชื่อกิจกรรม';
@@ -605,6 +609,7 @@ class _SearchandserviceState extends State<Searchandservice> {
                           style: GoogleFonts.kanit(
                             textStyle: TextStyle(fontSize: 14, height: 4),
                           ),
+                          // ignore: body_might_complete_normally_nullable
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return '    กรุณากรอกข้อมูลที่ใช้สำหรับการค้นหาชื่อสถานที่ , ชื่ออาหารหรือชื่อกิจกรรม';
@@ -774,6 +779,7 @@ class _SearchandserviceState extends State<Searchandservice> {
                         width: 700,
                         child: TextFormField(
                           style: GoogleFonts.kanit(),
+                          // ignore: body_might_complete_normally_nullable
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return '    กรุณากรอกข้อมูลที่ใช้สำหรับการค้นหาชื่อสถานที่ , ชื่ออาหารหรือชื่อกิจกรรม';

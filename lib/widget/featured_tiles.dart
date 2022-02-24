@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
+// ignore_for_file: unused_field
+
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project_web_supportandservice/states/Category/Categories.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../states/components/user/picture_components.dart';

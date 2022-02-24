@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/states/Category/Categories.dart';
-import 'package:flutter_project_web_supportandservice/states/components/user/picture_components.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editpage.dart';
 import 'package:flutter_project_web_supportandservice/widget/draweruseredit.dart';
 import 'package:flutter_project_web_supportandservice/widget/headeruseredit.dart';
 import 'package:flutter_project_web_supportandservice/widget/max_width_contanier.dart';
 
+// ignore: must_be_immutable
 class HomeUserEdit extends StatelessWidget {
   static const String routeName = '/homeuseredit';
   double _scrollPosition = 0;
@@ -53,9 +53,11 @@ class HomeUserEdit extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isMobileContent extends StatelessWidget {
   isMobileContent({Key? key}) : super(key: key);
   double _scrollPosition = 0;
+  // ignore: unused_field
   double _opacity = 0;
 
   @override
@@ -68,9 +70,11 @@ class isMobileContent extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isTabletContent extends StatelessWidget {
   isTabletContent({Key? key}) : super(key: key);
   double _scrollPosition = 0;
+  // ignore: unused_field
   double _opacity = 0;
 
   @override
@@ -83,9 +87,12 @@ class isTabletContent extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types, must_be_immutable
 class isDesktopContent extends StatelessWidget {
   isDesktopContent({Key? key}) : super(key: key);
+  // ignore: unused_field
   double _scrollPosition = 0;
+  // ignore: unused_field
   double _opacity = 0;
 
   @override

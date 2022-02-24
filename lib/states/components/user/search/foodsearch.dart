@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_web_supportandservice/widget/constants.dart';
 import 'package:flutter_project_web_supportandservice/widget/max_width_contanier.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_project_web_supportandservice/Model/fileupload.dart';
 
 class FoodStateSearch extends StatefulWidget {
@@ -57,18 +57,6 @@ class _FoodStateSearch extends State<FoodStateSearch> {
   void dispose() {
     super.dispose();
     _scrollController.dispose();
-  }
-
-  Future<List<Upload>> getupload() async {
-    final url =
-        'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/ShowData/fileupload.php';
-    final response = await http.get(Uri.parse(url));
-    print(response);
-    if (response.statusCode == 200) {
-      return uploadFromJson(response.body);
-    } else {
-      throw Exception(response.hashCode);
-    }
   }
 
   @override

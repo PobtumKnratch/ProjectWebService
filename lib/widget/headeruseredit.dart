@@ -1,18 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/states/Page/aboutmeeditor.dart';
-import 'package:flutter_project_web_supportandservice/states/Page/aboutmeuser.dart';
 import 'package:flutter_project_web_supportandservice/states/Page/homeuseredit.dart';
-import 'package:flutter_project_web_supportandservice/states/Page/login.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editdata.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/useredit_picture.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
+// ignore: must_be_immutable
 class HeaderBarEdit extends StatefulWidget {
   // const HeaderBarEdit({ Key? key }) : super(key: key);
   late double opacity;
@@ -48,21 +45,23 @@ class _HeaderBarEditState extends State<HeaderBarEdit> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return PreferredSize(
       preferredSize: Size(size.width, 70),
       child: Container(
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.white38,
-            blurRadius: 10.0,
-            spreadRadius: 1.0,
-            offset: Offset(2.0, 2.0),
-          ),
-        ], color: Colors.greenAccent.shade700,),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.white38,
+              blurRadius: 10.0,
+              spreadRadius: 1.0,
+              offset: Offset(2.0, 2.0),
+            ),
+          ],
+          color: Colors.greenAccent.shade700,
+        ),
         height: 75,
         // color: Colors.greenAccent.shade100,
         child: Row(
@@ -225,7 +224,7 @@ class _HeaderBarEditState extends State<HeaderBarEdit> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                   builder: (context) => UserEditPicture(),
+                    builder: (context) => UserEditPicture(),
                   ),
                 );
               },
@@ -271,7 +270,7 @@ class _HeaderBarEditState extends State<HeaderBarEdit> {
                       (value) => Navigator.pushNamedAndRemoveUntil(
                           context, '/login', (route) => false),
                     );
-                    exit(0);
+                exit(0);
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
