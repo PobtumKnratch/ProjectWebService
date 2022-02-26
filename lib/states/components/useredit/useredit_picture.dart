@@ -8,6 +8,7 @@ import 'package:flutter_project_web_supportandservice/widget/draweruser.dart';
 import 'package:flutter_project_web_supportandservice/widget/draweruseredit.dart';
 import 'package:flutter_project_web_supportandservice/widget/headeruseredit.dart';
 import 'package:flutter_project_web_supportandservice/widget/max_width_contanier.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UserEditPicture extends StatelessWidget {
   UserEditPicture({Key? key}) : super(key: key);
@@ -22,11 +23,37 @@ class UserEditPicture extends StatelessWidget {
         ? _scrollPosition / (size.height * 0.40)
         : 1;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(size.width, 70),
-        child: HeaderBarEdit(_opacity),
-      ),
-      drawer: createDraweredit(context),
+      appBar: size.width < 1200
+          ? AppBar(
+              iconTheme: IconThemeData(color: Colors.black, size: 20),
+              elevation: 0,
+              backgroundColor: Colors.greenAccent.shade700,
+              title: Row(
+                children: [
+                  Image(
+                    image: AssetImage('images/pictureicon/logo.png'),
+                    width: 25,
+                  ),
+                  SizedBox(
+                    width: size.width * 0.03,
+                  ),
+                  Text(
+                    'NAVANURAK',
+                    style: GoogleFonts.kanit(
+                      textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : PreferredSize(
+              preferredSize: Size(size.width, 70),
+              child: HeaderBarEdit(_opacity),
+            ),
+      // drawer: createDrawer(context),
       extendBodyBehindAppBar: true,
       endDrawer: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 300),
@@ -55,7 +82,20 @@ class isMobileContent extends StatelessWidget {
     _opacity = _scrollPosition < size.height * 0.40
         ? _scrollPosition / (size.height * 0.40)
         : 1;
-    return Container();
+    return Container(
+      color: Colors.greenAccent.shade100,
+      width: size.width,
+      height: size.height,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            CategoriesEdit(),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -71,7 +111,20 @@ class isTabletContent extends StatelessWidget {
     _opacity = _scrollPosition < size.height * 0.40
         ? _scrollPosition / (size.height * 0.40)
         : 1;
-    return Container();
+    return Container(
+      color: Colors.greenAccent.shade100,
+      width: size.width,
+      height: size.height,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            CategoriesEdit(),
+          ],
+        ),
+      ),
+    );
   }
 }
 

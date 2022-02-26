@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/card_dataedit.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/title_headeredit.dart';
+import 'package:flutter_project_web_supportandservice/widget/bottom_bar.dart';
 import 'package:flutter_project_web_supportandservice/widget/draweruseredit.dart';
 import 'package:flutter_project_web_supportandservice/widget/headeruseredit.dart';
 import 'package:flutter_project_web_supportandservice/widget/max_width_contanier.dart';
@@ -96,7 +97,7 @@ class isDesktopContent extends StatelessWidget {
     //     ? _scrollPosition / (size.height * 0.40)
     //     : 1;
     return Container(
-      color: Colors.greenAccent.shade100,
+      // color: Colors.white,
       width: size.width,
       height: size.height,
       child: SingleChildScrollView(
@@ -105,27 +106,16 @@ class isDesktopContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(top: size.height * 0.2),
-              child: Card(
-                margin: EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                clipBehavior: Clip.antiAlias,
-                elevation: 16,
-                semanticContainer: size.height.isFinite,
-                shape: RoundedRectangleBorder(
-                    // side: BorderSide(),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TitleHeaderEdit(),
-                    // CardDataEdit(),
-                  ],
-                ),
+              padding: EdgeInsets.only(top: size.height * 0.1),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleHeaderEdit(),
+                  BottomBar(),
+                ],
               ),
             ),
-            // UserEditPage(),
-            // Categories(),
           ],
         ),
       ),

@@ -22,8 +22,6 @@ class UserEditPersonal extends StatelessWidget {
           image: DecorationImage(
             image: AssetImage('images/picturebackground/usereditpersonal.jpg'),
             fit: BoxFit.cover,
-            // colorFilter: ColorFilter.mode(
-            //     Colors.black87.withOpacity(0.65), BlendMode.dstATop),
           ),
         ),
         child: ListView(

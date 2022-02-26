@@ -13,7 +13,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../widget/constants.dart';
 
 class Travel extends StatefulWidget {
-  const Travel({
+  List<Upload2> models;
+  Travel({
+    required this.models,
     Key? key,
   }) : super(key: key);
   @override
@@ -36,8 +38,9 @@ class _TravelState extends State<Travel> {
       loading = true;
     });
     // await Future.delayed(Duration(milliseconds: 500));
-    upload2 =  List.generate(20, (index) => "List Upload ${index + upload2.length}");
-    
+    upload2 =
+        List.generate(20, (index) => "List Upload ${index + upload2.length}");
+
     setState(() {
       loading = false;
       allLoaded = upload2.isEmpty;
@@ -57,8 +60,6 @@ class _TravelState extends State<Travel> {
     });
   }
 
-  
-
   @override
   void dispose() {
     super.dispose();
@@ -77,696 +78,426 @@ class _TravelState extends State<Travel> {
         desktop: isDesktopContent());
     return Responsive(
       mobile: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.height * 0.02, left: size.height * 0.05),
-                  child: Text(
-                    " หมวดข้อมูลท่องเที่ยว ",
-                    textAlign: TextAlign.left,
-                    style: GoogleFonts.kanit(
-                      textStyle: TextStyle(
-                        color: Colors.greenAccent.shade700,
-                        fontSize: 8,
-                      ),
-                    ),
-                  ),
+        child: widget.models.isEmpty
+            ? Center(
+                child: Text(
+                  'ไม่พบข้อมูล',
+                  style: GoogleFonts.kanit(fontSize: size.width * 0.05),
                 ),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: size.height * 0.02,
-                    left: size.height * 0.1,
-                  ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      " ยอดนิยม ",
-                      // textAlign: TextAlign.end,
-                      style: GoogleFonts.kanit(
-                        textStyle: TextStyle(
-                          color: Colors.greenAccent.shade700,
-                          fontSize: 8,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.height * 0.02,
-                      // left: size.height * 0.05,
-                      right: size.height * 0.02),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      " แนะนำ ",
-                      // textAlign: TextAlign.end,
-                      style: GoogleFonts.kanit(
-                        textStyle: TextStyle(
-                          color: Colors.greenAccent.shade700,
-                          fontSize: 8,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: size.height,
-              child: FutureBuilder<List<Upload2>>(
-                future: getupload2(),
-                builder: (context, snapshot) {
-                  if (upload2.isNotEmpty) {
-                    return StaggeredGridView.countBuilder(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 30,
-                      ),
-                      shrinkWrap: true,
-                      primary: false,
-                      physics: BouncingScrollPhysics(),
-                      crossAxisCount: 2,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (Upload2, index) {
-                        final upload = snapshot.data![index];
-                        return GestureDetector(
-                          onTap: () {
-                            showDialogTravel(context, upload.image, upload.name,
-                                upload.date);
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.only(top: size.height * 0.02),
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.loose,
-                                    child: Stack(
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  
+                  Container(
+                    height: size.height,
+                    child: FutureBuilder<List<Upload2>>(
+                      future: getupload2(),
+                      builder: (context, snapshot) {
+                        if (upload2.isNotEmpty) {
+                          return StaggeredGridView.countBuilder(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                            ),
+                            shrinkWrap: true,
+                            primary: false,
+                            physics: BouncingScrollPhysics(),
+                            crossAxisCount: 2,
+                            itemCount: widget.models.length,
+                            itemBuilder: (context, index) {
+                              final upload = snapshot.data![index];
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialogTravel(context, upload.image,
+                                      upload.name, upload.date);
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(top: size.height * 0.02),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: CachedNetworkImage(
-                                            placeholder: (context, url) =>
-                                                Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                            imageUrl:
-                                                'http://localhost/flutter_project_web_supportandservice/Backend/server/backendlastversion/pictur_data/fileupload2/${upload.image}',
-                                            fit: BoxFit.cover,
-                                            width: size.width,
-                                            height: size.height,
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Image.asset(
-                                              'images/picturecontent/travel.jpg',
-                                              fit: BoxFit.cover,
-                                              width: size.width,
-                                              height: size.height,
-                                            ),
+                                        Flexible(
+                                          flex: 1,
+                                          fit: FlexFit.loose,
+                                          child: Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                clipBehavior: Clip.antiAlias,
+                                                child: CachedNetworkImage(
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                  imageUrl:
+                                                      '$hostpic/fileupload2/${widget.models[index].image}',
+                                                  fit: BoxFit.cover,
+                                                  width: size.width,
+                                                  height: size.height,
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Image.asset(
+                                                    'images/picturecontent/travel.jpg',
+                                                    fit: BoxFit.cover,
+                                                    width: size.width,
+                                                    height: size.height,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        // Padding(
-                                        //   padding: EdgeInsets.only(
-                                        //       top: size.height * 0.25),
-                                        //   child: GridTile(
-                                        //     footer: Material(
-                                        //       color: Colors.transparent,
-                                        //       shape: RoundedRectangleBorder(
-                                        //         borderRadius:
-                                        //             BorderRadius.vertical(
-                                        //           bottom: Radius.circular(15),
-                                        //         ),
-                                        //       ),
-                                        //       clipBehavior: Clip.antiAlias,
-                                        //     ),
-                                        //     child: GridTileBar(
-                                        //       // backgroundColor: Colors.black12,
-                                        //       title: Text(
-                                        // cutWord('${upload.name}'),
-                                        //         textAlign: TextAlign.center,
-                                        //         softWrap: true,
-                                        //         style: TextStyle(
-                                        //           fontSize: 18,
-                                        //         ),
-                                        //       ),
-                                        //       subtitle: Text(
-                                        //         '${upload.date}',
-                                        //         textAlign: TextAlign.center,
-                                        //         softWrap: true,
-                                        //         style: TextStyle(fontSize: 18),
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: size.height * 0.02),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: AppConst.padding),
-                                    child: Row(
-                                      children: [
-                                        // CircleAvatar(
-                                        //   radius: 14,
-                                        //   backgroundImage: AssetImage(post.userImg),
-                                        // ),
-                                        const SizedBox(width: AppConst.padding),
-                                        Text('${upload.name}',
-                                            style: GoogleFonts.kanit(
-                                                fontSize: 10)),
-                                        const Spacer(),
-                                        Row(
-                                          children: [
-                                            // const Icon(
-                                            //   Icons.thumb_up_alt_outlined,
-                                            //   color: Colors.blue,
-                                            // ),
-                                            const SizedBox(
-                                                width: AppConst.padding / 2),
-                                            // Text(post.likes.toString()),
-                                            const SizedBox(
-                                                width: AppConst.padding),
-                                            const Icon(
-                                              Icons.chat_bubble_outline_rounded,
-                                              color: Colors.black,
-                                              size: 10,
-                                            ),
-                                            // const SizedBox(
-                                            //     width: AppConst.padding / ),
-                                            // Text(post.comments.toString()),
-                                          ],
+                                        SizedBox(height: size.height * 0.02),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: AppConst.padding),
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(
+                                                  width: AppConst.padding),
+                                              Text(
+                                                widget.models[index].name,
+                                                style: GoogleFonts.kanit(
+                                                    fontSize: 10),
+                                              ),
+                                              const Spacer(),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                      width:
+                                                          AppConst.padding / 2),
+                                                  const SizedBox(
+                                                      width: AppConst.padding),
+                                                  const Icon(
+                                                    Icons
+                                                        .chat_bubble_outline_rounded,
+                                                    color: Colors.black,
+                                                    size: 10,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  // const SizedBox(height: AppConst.padding),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
+                                ),
+                              );
+                            },
+                            staggeredTileBuilder: (index) =>
+                                // new StaggeredTile.fit(1),
+                                index % 8 == 2
+                                    ? StaggeredTile.count(2, 1.5)
+                                    : StaggeredTile.count(2, 2.5),
+                            // new StaggeredTile.count(2, index.isEven ? 2 : 1.5 ),
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                            controller: _scrollController,
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
                       },
-                      staggeredTileBuilder: (index) =>
-                          // new StaggeredTile.fit(1),
-                          index % 8 == 2
-                              ? StaggeredTile.count(2, 1.5)
-                              : StaggeredTile.count(2, 2.5),
-                      // new StaggeredTile.count(2, index.isEven ? 2 : 1.5 ),
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      controller: _scrollController,
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
       tablet: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.height * 0.03, left: size.height * 0.05),
-                  child: Text(
-                    " หมวดข้อมูลท่องเที่ยว ",
-                    textAlign: TextAlign.left,
-                    style: GoogleFonts.kanit(
-                      textStyle: TextStyle(
-                        color: Colors.greenAccent.shade700,
-                        // fontSize: 14,
-                      ),
-                    ),
-                  ),
+        child: widget.models.isEmpty
+            ? Center(
+                child: Text(
+                  'ไม่พบข้อมูล',
+                  style: GoogleFonts.kanit(fontSize: size.width * 0.05),
                 ),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: size.height * 0.03,
-                    left: size.height * 0.05,
-                  ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      " ยอดนิยม ",
-                      // textAlign: TextAlign.end,
-                      style: GoogleFonts.kanit(
-                        textStyle: TextStyle(
-                          color: Colors.greenAccent.shade700,
-                          // fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.height * 0.03,
-                      left: size.height * 0.05,
-                      right: size.height * 0.1),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      " แนะนำ ",
-                      // textAlign: TextAlign.end,
-                      style: GoogleFonts.kanit(
-                        textStyle: TextStyle(
-                          color: Colors.greenAccent.shade700,
-                          // fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: size.height,
-              child: FutureBuilder<List<Upload2>>(
-                future: getupload2(),
-                builder: (context, snapshot) {
-                  if (upload2.isNotEmpty) {
-                    return StaggeredGridView.countBuilder(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 30,
-                      ),
-                      shrinkWrap: true,
-                      primary: false,
-                      physics: BouncingScrollPhysics(),
-                      crossAxisCount: 7,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (Upload2, index) {
-                        final upload = snapshot.data![index];
-                        return GestureDetector(
-                          onTap: () {
-                            showDialogTravel(context, upload.image, upload.name,
-                                upload.date);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.loose,
-                                    child: Stack(
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  
+                  Container(
+                    height: size.height,
+                    child: FutureBuilder<List<Upload2>>(
+                      future: getupload2(),
+                      builder: (context, snapshot) {
+                        if (upload2.isNotEmpty) {
+                          return StaggeredGridView.countBuilder(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                            ),
+                            shrinkWrap: true,
+                            primary: false,
+                            physics: BouncingScrollPhysics(),
+                            crossAxisCount: 7,
+                            itemCount: widget.models.length,
+                            itemBuilder: (context, index) {
+                              final upload = snapshot.data![index];
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialogTravel(context, upload.image,
+                                      upload.name, upload.date);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: CachedNetworkImage(
-                                            placeholder: (context, url) =>
-                                                Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                            imageUrl:
-                                                'http://localhost/flutter_project_web_supportandservice/Backend/server/backendlastversion/pictur_data/fileupload2/${upload.image}',
-                                            fit: BoxFit.cover,
-                                            width: size.width,
-                                            height: size.height,
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Image.asset(
-                                              'images/picturecontent/travel.jpg',
-                                              fit: BoxFit.cover,
-                                              width: size.width,
-                                              height: size.height,
-                                            ),
+                                        Flexible(
+                                          flex: 1,
+                                          fit: FlexFit.loose,
+                                          child: Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                clipBehavior: Clip.antiAlias,
+                                                child: CachedNetworkImage(
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                  imageUrl:
+                                                      '$hostpic/fileupload2/${widget.models[index].image}',
+                                                  fit: BoxFit.cover,
+                                                  width: size.width,
+                                                  height: size.height,
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Image.asset(
+                                                    'images/picturecontent/travel.jpg',
+                                                    fit: BoxFit.cover,
+                                                    width: size.width,
+                                                    height: size.height,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        // Padding(
-                                        //   padding: EdgeInsets.only(
-                                        //       top: size.height * 0.25),
-                                        //   child: GridTile(
-                                        //     footer: Material(
-                                        //       color: Colors.transparent,
-                                        //       shape: RoundedRectangleBorder(
-                                        //         borderRadius:
-                                        //             BorderRadius.vertical(
-                                        //           bottom: Radius.circular(15),
-                                        //         ),
-                                        //       ),
-                                        //       clipBehavior: Clip.antiAlias,
-                                        //     ),
-                                        //     child: GridTileBar(
-                                        //       // backgroundColor: Colors.black12,
-                                        //       title: Text(
-                                        // cutWord('${upload.name}'),
-                                        //         textAlign: TextAlign.center,
-                                        //         softWrap: true,
-                                        //         style: TextStyle(
-                                        //           fontSize: 18,
-                                        //         ),
-                                        //       ),
-                                        //       subtitle: Text(
-                                        //         '${upload.date}',
-                                        //         textAlign: TextAlign.center,
-                                        //         softWrap: true,
-                                        //         style: TextStyle(fontSize: 18),
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: AppConst.padding),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: AppConst.padding),
-                                    child: Row(
-                                      children: [
-                                        // CircleAvatar(
-                                        //   radius: 14,
-                                        //   backgroundImage: AssetImage(post.userImg),
-                                        // ),
-                                        const SizedBox(width: AppConst.padding),
-                                        Text('${upload.name}'),
-                                        const Spacer(),
-                                        Row(
-                                          children: [
-                                            // const Icon(
-                                            //   Icons.thumb_up_alt_outlined,
-                                            //   color: Colors.blue,
-                                            // ),
-                                            const SizedBox(
-                                                width: AppConst.padding / 2),
-                                            // Text(post.likes.toString()),
-                                            const SizedBox(
-                                                width: AppConst.padding),
-                                            const Icon(
-                                              Icons.chat_bubble_outline_rounded,
-                                              color: Colors.black,
-                                            ),
-                                            const SizedBox(
-                                                width: AppConst.padding / 2),
-                                            // Text(post.comments.toString()),
-                                          ],
+                                        const SizedBox(
+                                            height: AppConst.padding),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: AppConst.padding),
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(
+                                                  width: AppConst.padding),
+                                              Text(widget.models[index].name,
+                                                  style: GoogleFonts.kanit(
+                                                      fontSize: 10)),
+                                              const Spacer(),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                      width:
+                                                          AppConst.padding / 2),
+                                                  const SizedBox(
+                                                      width: AppConst.padding),
+                                                  const Icon(
+                                                    Icons
+                                                        .chat_bubble_outline_rounded,
+                                                    color: Colors.black,
+                                                  ),
+                                                  const SizedBox(
+                                                      width:
+                                                          AppConst.padding / 2),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
+                                        const SizedBox(
+                                            height: AppConst.padding),
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: AppConst.padding),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
+                                ),
+                              );
+                            },
+                            staggeredTileBuilder: (index) =>
+                                // new StaggeredTile.fit(1),
+                                index % 8 == 2
+                                    ? StaggeredTile.count(1, 1.5)
+                                    : StaggeredTile.count(2, 1.5),
+                            // new StaggeredTile.count(2, index.isEven ? 2 : 1.5 ),
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                            controller: _scrollController,
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
                       },
-                      staggeredTileBuilder: (index) =>
-                          // new StaggeredTile.fit(1),
-                          index % 8 == 2
-                              ? StaggeredTile.count(1, 1.5)
-                              : StaggeredTile.count(2, 1.5),
-                      // new StaggeredTile.count(2, index.isEven ? 2 : 1.5 ),
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      controller: _scrollController,
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
       desktop: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.height * 0.03, left: size.height * 0.05),
-                  child: Text(
-                    " หมวดข้อมูลท่องเที่ยว ",
-                    textAlign: TextAlign.left,
-                    style: GoogleFonts.kanit(
-                      textStyle: TextStyle(
-                        color: Colors.greenAccent.shade700,
-                        // fontSize: 14,
-                      ),
-                    ),
-                  ),
+        margin: EdgeInsets.only(top: size.height * 0.03),
+        child: widget.models.isEmpty
+            ? Center(
+                child: Text(
+                  'ไม่พบข้อมูล',
+                  style: GoogleFonts.kanit(fontSize: size.width * 0.05),
                 ),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: size.height * 0.03,
-                    left: size.height * 0.05,
-                  ),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      " ยอดนิยม ",
-                      // textAlign: TextAlign.end,
-                      style: GoogleFonts.kanit(
-                        textStyle: TextStyle(
-                          color: Colors.greenAccent.shade700,
-                          // fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: size.height * 0.03,
-                      left: size.height * 0.05,
-                      right: size.height * 0.1),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      " แนะนำ ",
-                      // textAlign: TextAlign.end,
-                      style: GoogleFonts.kanit(
-                        textStyle: TextStyle(
-                          color: Colors.greenAccent.shade700,
-                          // fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: size.height,
-              child: FutureBuilder<List<Upload2>>(
-                future: getupload2(),
-                builder: (context, snapshot) {
-                  if (upload2.isNotEmpty) {
-                    return StaggeredGridView.countBuilder(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 30,
-                      ),
-                      shrinkWrap: true,
-                      primary: false,
-                      physics: BouncingScrollPhysics(),
-                      crossAxisCount: 7,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (Upload2, index) {
-                        final upload = snapshot.data![index];
-                        return GestureDetector(
-                          onTap: () {
-                            showDialogTravel(context, upload.image, upload.name,
-                                upload.date);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    fit: FlexFit.loose,
-                                    child: Stack(
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: size.height,
+                    child: FutureBuilder<List<Upload2>>(
+                      future: getupload2(),
+                      builder: (context, snapshot) {
+                        if (upload2.isNotEmpty) {
+                          return StaggeredGridView.countBuilder(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                            ),
+                            shrinkWrap: true,
+                            primary: false,
+                            physics: BouncingScrollPhysics(),
+                            crossAxisCount: 7,
+                            itemCount: widget.models.length,
+                            itemBuilder: (context, index) {
+                              final upload = snapshot.data![index];
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialogTravel(context, upload.image,
+                                      upload.name, upload.date);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: CachedNetworkImage(
-                                            placeholder: (context, url) =>
-                                                Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                            imageUrl:
-                                                'http://localhost/flutter_project_web_supportandservice/Backend/server/backendlastversion/pictur_data/fileupload2/${upload.image}',
-                                            fit: BoxFit.cover,
-                                            width: size.width,
-                                            height: size.height,
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Image.asset(
-                                              'images/picturecontent/travel.jpg',
-                                              fit: BoxFit.cover,
-                                              width: size.width,
-                                              height: size.height,
-                                            ),
+                                        Flexible(
+                                          flex: 1,
+                                          fit: FlexFit.loose,
+                                          child: Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                clipBehavior: Clip.antiAlias,
+                                                child: CachedNetworkImage(
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                  imageUrl:
+                                                      '$hostpic/fileupload2/${widget.models[index].image}',
+                                                  fit: BoxFit.cover,
+                                                  width: size.width,
+                                                  height: size.height,
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Image.asset(
+                                                    'images/picturecontent/travel.jpg',
+                                                    fit: BoxFit.cover,
+                                                    width: size.width,
+                                                    height: size.height,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        // Padding(
-                                        //   padding: EdgeInsets.only(
-                                        //       top: size.height * 0.25),
-                                        //   child: GridTile(
-                                        //     footer: Material(
-                                        //       color: Colors.transparent,
-                                        //       shape: RoundedRectangleBorder(
-                                        //         borderRadius:
-                                        //             BorderRadius.vertical(
-                                        //           bottom: Radius.circular(15),
-                                        //         ),
-                                        //       ),
-                                        //       clipBehavior: Clip.antiAlias,
-                                        //     ),
-                                        //     child: GridTileBar(
-                                        //       // backgroundColor: Colors.black12,
-                                        //       title: Text(
-                                        // cutWord('${upload.name}'),
-                                        //         textAlign: TextAlign.center,
-                                        //         softWrap: true,
-                                        //         style: TextStyle(
-                                        //           fontSize: 18,
-                                        //         ),
-                                        //       ),
-                                        //       subtitle: Text(
-                                        //         '${upload.date}',
-                                        //         textAlign: TextAlign.center,
-                                        //         softWrap: true,
-                                        //         style: TextStyle(fontSize: 18),
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: AppConst.padding),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: AppConst.padding),
-                                    child: Row(
-                                      children: [
-                                        // CircleAvatar(
-                                        //   radius: 14,
-                                        //   backgroundImage: AssetImage(post.userImg),
-                                        // ),
-                                        const SizedBox(width: AppConst.padding),
-                                        Text('${upload.name}'),
-                                        const Spacer(),
-                                        Row(
-                                          children: [
-                                            // const Icon(
-                                            //   Icons.thumb_up_alt_outlined,
-                                            //   color: Colors.blue,
-                                            // ),
-                                            const SizedBox(
-                                                width: AppConst.padding / 2),
-                                            // Text(post.likes.toString()),
-                                            const SizedBox(
-                                                width: AppConst.padding),
-                                            const Icon(
-                                              Icons.chat_bubble_outline_rounded,
-                                              color: Colors.black,
-                                            ),
-                                            const SizedBox(
-                                                width: AppConst.padding / 2),
-                                            // Text(post.comments.toString()),
-                                          ],
+                                        const SizedBox(
+                                            height: AppConst.padding),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: AppConst.padding),
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(
+                                                  width: AppConst.padding),
+                                              Text(
+                                                widget.models[index].name,
+                                                style: GoogleFonts.kanit(
+                                                    fontSize: 18),
+                                              ),
+                                              const Spacer(),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                      width:
+                                                          AppConst.padding / 2),
+                                                  const SizedBox(
+                                                      width: AppConst.padding),
+                                                  const Icon(
+                                                    Icons
+                                                        .chat_bubble_outline_rounded,
+                                                    color: Colors.black,
+                                                  ),
+                                                  const SizedBox(
+                                                      width:
+                                                          AppConst.padding / 2),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
+                                        const SizedBox(
+                                            height: AppConst.padding),
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: AppConst.padding),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
+                                ),
+                              );
+                            },
+                            staggeredTileBuilder: (index) =>
+                                // new StaggeredTile.fit(1),
+                                index % 8 == 2
+                                    ? StaggeredTile.count(1, 1.5)
+                                    : StaggeredTile.count(2, 1.5),
+                            // new StaggeredTile.count(2, index.isEven ? 2 : 1.5 ),
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                            controller: _scrollController,
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
                       },
-                      staggeredTileBuilder: (index) =>
-                          // new StaggeredTile.fit(1),
-                          index % 8 == 2
-                              ? StaggeredTile.count(1, 1.5)
-                              : StaggeredTile.count(2, 1.5),
-                      // new StaggeredTile.count(2, index.isEven ? 2 : 1.5 ),
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      controller: _scrollController,
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
-  }
-
-  // ignore: unused_element
-  int _getCountForScreenType(Responsive responsive) {
-    // ignore: unrelated_type_equality_checks
-    if (responsive == Responsive.isDesktopContent(context)) {
-      return 3;
-      // ignore: unrelated_type_equality_checks
-    } else if (responsive == Responsive.isTabletContent(context)) {
-      return 2;
-    }
-    return 1;
   }
 
   showDialogTravel(context, uploadimage, uploadname, uploaddate) {

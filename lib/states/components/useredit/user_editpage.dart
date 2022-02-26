@@ -118,14 +118,15 @@ class _UserEditPageState extends State<UserEditPage> {
                             maxLines: 2,
                             style: GoogleFonts.kanit(
                               textStyle: TextStyle(
-                                fontSize: 23,
+                                color: Colors.white,
+                                fontSize: 18,
                               ),
                             ),
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: size.height * 0.04,
+                        height: size.height * 0.03,
                       ),
                       Image(
                         image: AssetImage('images/pictureicon/logo.png'),
@@ -169,12 +170,9 @@ class _UserEditPageState extends State<UserEditPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // width: size.width *0.3,
-                        // height: size.height *0.3,
                         child: FittedBox(
                           child: Text(
                             'เครื่องมือตรวจสอบข้อมูลคลังรูปภาพ อว.',
-                            // maxLines: 2,
                             style: GoogleFonts.kanit(
                               textStyle: TextStyle(
                                 fontSize: 30,

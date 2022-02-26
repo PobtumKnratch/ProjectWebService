@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 class Upload2 {
+  String title;
   String id;
   String user_id;
   String name;
@@ -11,6 +12,7 @@ class Upload2 {
   String date;
   String tag;
   Upload2({
+    required this.title,
     required this.id,
     required this.user_id,
     required this.name,
@@ -21,6 +23,7 @@ class Upload2 {
   });
 
   Upload2 copyWith({
+    String? title,
     String? id,
     String? user_id,
     String? name,
@@ -30,6 +33,7 @@ class Upload2 {
     String? tag,
   }) {
     return Upload2(
+      title: title ?? this.title,
       id: id ?? this.id,
       user_id: user_id ?? this.user_id,
       name: name ?? this.name,
@@ -42,6 +46,7 @@ class Upload2 {
 
   Map<String, dynamic> toMap() {
     return {
+      'title': title,
       'id': id,
       'user_id': user_id,
       'name': name,
@@ -54,6 +59,7 @@ class Upload2 {
 
   factory Upload2.fromMap(Map<String, dynamic> map) {
     return Upload2(
+      title: map['title'] ?? '',
       id: map['id'] ?? '',
       user_id: map['user_id'] ?? '',
       name: map['name'] ?? '',
@@ -71,7 +77,7 @@ class Upload2 {
 
   @override
   String toString() {
-    return 'Upload2(id: $id, user_id: $user_id, name: $name, description: $description, image: $image, date: $date, tag: $tag)';
+    return 'Upload2(title: $title,id: $id, user_id: $user_id, name: $name, description: $description, image: $image, date: $date, tag: $tag)';
   }
 
   @override
@@ -79,6 +85,7 @@ class Upload2 {
     if (identical(this, other)) return true;
 
     return other is Upload2 &&
+        other.title == title &&
         other.id == id &&
         other.user_id == user_id &&
         other.name == name &&
@@ -90,7 +97,8 @@ class Upload2 {
 
   @override
   int get hashCode {
-    return id.hashCode ^
+    return title.hashCode ^
+        id.hashCode ^
         user_id.hashCode ^
         name.hashCode ^
         description.hashCode ^

@@ -53,7 +53,7 @@ class HomeUser extends StatelessWidget {
               preferredSize: Size(size.width, 70),
               child: HeaderBar(_opacity),
             ),
-      // drawer: createDrawer(context),
+    
       extendBodyBehindAppBar: true,
       endDrawer: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 300),
@@ -66,20 +66,7 @@ class HomeUser extends StatelessWidget {
           desktop: isDesktopContent(),
         ),
       ),
-      // Container(
-      //   color: Colors.white,
-      //   width: size.width,
-      //   height: size.height,
-      //   child: SingleChildScrollView(
-      //     child: Column(
-      //       crossAxisAlignment: CrossAxisAlignment.start,
-      //       mainAxisAlignment: MainAxisAlignment.start,
-      //       children: <Widget>[
-      //         Detail(),
-      //       ],
-      //     ),
-      //   ),
-      // ),
+ 
     );
   }
 }
@@ -113,13 +100,12 @@ class isMobileContent extends StatelessWidget {
             FeaturedTiles(
               screenSize: size,
             ),
-            // FeaturedList(screenSize: size,),
+
             MainHeading(
               screenSize: size,
             ),
             Carousel(),
-            // SizedBox(height: size.height*0.02,),
-            // Categories(),
+  
             BottomBar(),
           ],
         ),
@@ -157,13 +143,12 @@ class isTabletContent extends StatelessWidget {
             FeaturedTiles(
               screenSize: size,
             ),
-            // FeaturedList(screenSize: size,),
+   
             MainHeading(
               screenSize: size,
             ),
             Carousel(),
-            // Categories(),
-            // SizedBox(height: size.height*0.02,),
+
             BottomBar(),
           ],
         ),
@@ -183,9 +168,7 @@ class isDesktopContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // _opacity = _scrollPosition < size.height * 0.40
-    //     ? _scrollPosition / (size.height * 0.40)
-    //     : 1;
+
     return Container(
       color: Colors.white,
       width: size.width,
@@ -202,13 +185,12 @@ class isDesktopContent extends StatelessWidget {
             FeaturedTiles(
               screenSize: size,
             ),
-            // FeaturedList(screenSize: size,),
+   
             MainHeading(
               screenSize: size,
             ),
             Carousel(),
-            // Categories(),
-            // SizedBox(height: size.height*0.02,),
+
             BottomBar(),
           ],
         ),

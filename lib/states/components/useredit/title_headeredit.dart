@@ -3,6 +3,7 @@ import 'package:flutter_project_web_supportandservice/Model/fileupload.dart';
 import 'package:flutter_project_web_supportandservice/Model/fileupload2.dart';
 import 'package:flutter_project_web_supportandservice/Model/fileupload3.dart';
 import 'package:flutter_project_web_supportandservice/Model/fileupload4.dart';
+import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/card_dataedit.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/form_useredit/add.dart';
 import 'package:flutter_project_web_supportandservice/widget/constants.dart';
@@ -10,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TitleHeaderEdit extends StatefulWidget {
+  static const String routeName = '/titleheaderedit';
   TitleHeaderEdit({Key? key}) : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class _TitleHeaderEditState extends State<TitleHeaderEdit> {
       print('length ===>>>> ${models2.length}');
       for (var item in models2) {
         showModel.add(Upload(
+            title: 'หมวดหมู่การท่องเที่ยว',
             id: item.id,
             user_id: item.user_id,
             name: item.name,
@@ -46,6 +49,7 @@ class _TitleHeaderEditState extends State<TitleHeaderEdit> {
       print('length ===>>>> ${models.length}');
       for (var item in models) {
         showModel.add(Upload(
+            title: 'หมวดหมู่อาหาร',
             id: item.id,
             user_id: item.user_id,
             name: item.name,
@@ -59,6 +63,7 @@ class _TitleHeaderEditState extends State<TitleHeaderEdit> {
       print('length ===>>>> ${models3.length}');
       for (var item in models3) {
         showModel.add(Upload(
+            title: 'ป้ายสถานที่ท่องเที่ยวต่างๆ',
             id: item.id,
             user_id: item.user_id,
             name: item.name,
@@ -72,6 +77,7 @@ class _TitleHeaderEditState extends State<TitleHeaderEdit> {
       print('length ===>>>> ${models4.length}');
       for (var item in models4) {
         showModel.add(Upload(
+            title: 'หมวดหมู่ตามสถานการณ์',
             id: item.id,
             user_id: item.user_id,
             name: item.name,
@@ -100,132 +106,316 @@ class _TitleHeaderEditState extends State<TitleHeaderEdit> {
     _opacity = _scrollPosition < size.height * 0.40
         ? _scrollPosition / (size.height * 0.40)
         : 1;
+    double sizeWidth = MediaQuery.of(context).size.width;
     // ignore: unused_local_variable
     Size sized = MediaQuery.of(context).size;
-    return Padding(
-      padding: EdgeInsets.only(top: size.height * 0.02),
-      child: isLoad
-          ? Center(
-              child: Column(
-                children: [
-                  CircularProgressIndicator(),
-                  // Text(
-                  //   'ไม่พบข้อมูล',
-                  //   style: oogleFonts.kanit(
-                  //       textStyle: TextStyle(fontSize: 20)),
-                  // ),
-                ],
-              ),
-            )
-          : SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: size.height * 0.05),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'การจัดการข้อมูลการท่องเที่ยว',
-                          textAlign: TextAlign.start,
-                          style: GoogleFonts.kanit(
-                            textStyle: TextStyle(
-                              fontSize: 30,
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          splashColor: Colors.greenAccent,
-                          borderRadius: BorderRadius.circular(10.0),
-                          onTap: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Add(),
+    return Responsive(
+      mobile: Padding(
+        padding: EdgeInsets.only(top: size.height * 0.05),
+        child: isLoad
+            ? Center(
+                child: Column(
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: sizeWidth * 0.12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'การจัดการข้อมูลการท่องเที่ยว',
+                            textAlign: TextAlign.start,
+                            style: GoogleFonts.kanit(
+                              textStyle: TextStyle(
+                                fontSize: 30,
                               ),
                             ),
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 2.0, color: Colors.greenAccent),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.add_box_outlined,
-                                  size: 30,
-                                  color: Colors.greenAccent,
+                          ),
+                          Spacer(),
+                          InkWell(
+                            splashColor: Colors.greenAccent,
+                            borderRadius: BorderRadius.circular(10.0),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Add(),
                                 ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  'เพิ่มข้อมูลรูปภาพ',
-                                  style: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
+                              ),
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 2.0, color: Colors.greenAccent),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.add_box_outlined,
+                                    size: 30,
+                                    color: Colors.greenAccent,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'เพิ่มข้อมูลรูปภาพ',
+                                    style: GoogleFonts.kanit(
+                                      textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // ListView.builder(
-                  //     itemBuilder: (context, index) =>
-                  //         CardDataEdit(model: models[index]),
-                  //     itemCount: models.length,
-                  //   )
-                  Column(
-                    children: List.generate(
-                      showModel.length,
-                      (index) => CardDataEdit(
-                        model: showModel[index],
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: sizeWidth * 0.1, vertical: 10),
+                      child: Divider(
+                        color: Colors.black12,
+                        height: 10,
+                        thickness: 2,
+                        indent: 10,
+                        endIndent: size.width * 0.025,
+                      ),
+                    ),
+                    Column(
+                      children: List.generate(
+                        showModel.length,
+                        (index) => CardDataEdit(
+                          model: showModel[index],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+      ),
+      tablet: Padding(
+        padding: EdgeInsets.only(top: size.height * 0.05),
+        child: isLoad
+            ? Center(
+                child: Column(
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: sizeWidth * 0.12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'การจัดการข้อมูลการท่องเที่ยว',
+                            textAlign: TextAlign.start,
+                            style: GoogleFonts.kanit(
+                              textStyle: TextStyle(
+                                fontSize: 30,
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          InkWell(
+                            splashColor: Colors.greenAccent,
+                            borderRadius: BorderRadius.circular(10.0),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Add(),
+                                ),
+                              ),
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 2.0, color: Colors.greenAccent),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.add_box_outlined,
+                                    size: 30,
+                                    color: Colors.greenAccent,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'เพิ่มข้อมูลรูปภาพ',
+                                    style: GoogleFonts.kanit(
+                                      textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: sizeWidth * 0.1, vertical: 10),
+                      child: Divider(
+                        color: Colors.black12,
+                        height: 10,
+                        thickness: 2,
+                        indent: 10,
+                        endIndent: size.width * 0.025,
+                      ),
+                    ),
+                    Column(
+                      children: List.generate(
+                        showModel.length,
+                        (index) => CardDataEdit(
+                          model: showModel[index],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      ),
+      desktop: Padding(
+        padding: EdgeInsets.only(top: size.height * 0.05),
+        child: isLoad
+            ? Center(
+                child: Column(
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: sizeWidth * 0.12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'การจัดการข้อมูลการท่องเที่ยว',
+                            textAlign: TextAlign.start,
+                            style: GoogleFonts.kanit(
+                              textStyle: TextStyle(
+                                fontSize: 30,
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          InkWell(
+                            splashColor: Colors.greenAccent,
+                            borderRadius: BorderRadius.circular(10.0),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Add(),
+                                ),
+                              ),
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 2.0, color: Colors.greenAccent),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.add_box_outlined,
+                                    size: 30,
+                                    color: Colors.greenAccent,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'เพิ่มข้อมูลรูปภาพ',
+                                    style: GoogleFonts.kanit(
+                                      textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: sizeWidth * 0.1, vertical: 10),
+                      child: Divider(
+                        color: Colors.black12,
+                        height: 10,
+                        thickness: 2,
+                        indent: 10,
+                        endIndent: size.width * 0.025,
+                      ),
+                    ),
+                    Column(
+                      children: List.generate(
+                        showModel.length,
+                        (index) => CardDataEdit(
+                          model: showModel[index],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      ),
     );
   }
 }
-
-// class widgenerate extends StatelessWidget {
-//   widgenerate({
-//     Key? key,
-//     required this.models,
-//     required this.models2,
-//     required this.models3,
-//     required this.models4,
-//   }) : super(key: key);
-//   List<Upload> models;
-//   List<Upload2> models2;
-//   List<Upload3> models3;
-//   List<Upload4> models4;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     if (models.isNotEmpty) {
-//       return Column(
-//       children: List.generate(
-//         models.length,
-//         (index) => CardDataEdit(
-//           model: models[index],
-//         ),
-//       ),
-//     );
-//     }
-//   }
-// }

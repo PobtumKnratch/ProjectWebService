@@ -6,16 +6,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_project_web_supportandservice/widget/constants.dart';
-
-import 'package:image_picker_web/image_picker_web.dart';
-import 'package:open_file/open_file.dart';
-import 'package:mime_type/mime_type.dart';
 import 'package:dio/dio.dart';
-import 'package:path/path.dart' as Path;
-import 'package:async/async.dart';
-
-import 'package:provider/provider.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_project_web_supportandservice/widget/dialog.dart';
 import 'package:flutter/material.dart';
@@ -93,18 +84,10 @@ class _BodyState extends State<Body> {
   File? file;
   String? image;
   late String name, tag, description;
-  Provider? provider;
-  bool kIsWeb = identical(0, 0.0);
-  Uint8List webImage = Uint8List(10);
 
   FilePickerResult? result;
   PlatformFile? platformFile;
-
   Dio dio = Dio();
-  // late html.File _cloudFile;
-  // var _fileBytes;
-  // late Uint8List _imageWidget;
-  // PlatformFile? objFile = null;
   List<int>? _selectedFile;
   Uint8List? _bytesData;
 
@@ -130,33 +113,32 @@ class _BodyState extends State<Body> {
   }
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //TextEditingController useridController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController tagController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  addImage() {
-    for (var bytes in photo!) {
-      itemPhotosWidgetList.add(
-        Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Container(
-            height: 90.0,
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Container(
-                child: kIsWeb
-                    ? Image.network(File(bytes.path).path)
-                    : Image.file(
-                        File(bytes.path),
-                      ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-  }
+  // addImage() {
+  //   for (var bytes in photo!) {
+  //     itemPhotosWidgetList.add(
+  //       Padding(
+  //         padding: const EdgeInsets.all(1.0),
+  //         child: Container(
+  //           height: 90.0,
+  //           child: AspectRatio(
+  //             aspectRatio: 16 / 9,
+  //             child: Container(
+  //               child: kIsWeb
+  //                   ? Image.network(File(bytes.path).path)
+  //                   : Image.file(
+  //                       File(bytes.path),
+  //                     ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
   Future<void> insertImage(
     Uint8List _bytesImgData,
@@ -221,85 +203,8 @@ class _BodyState extends State<Body> {
       _bytesData =
           const Base64Decoder().convert(result.toString().split(",").last);
       _selectedFile = _bytesData;
-      // print(_selectedFile);
     });
   }
-
-  // Future addCategory() async {
-  //   final urldata = Uri.parse(
-  //       "http://localhost/flutter_project_web_supportandservice/Backend/server/uptravel.php");
-  //   String pathUser =
-  //       'http://localhost/flutter_project_web_supportandservice/Backend/server/getuserwhereuser.php?isAdd=true&user_id=$user_id';
-  //   await http.get(Uri.parse(pathUser)).then(
-  //     (value) async {
-  //       SharedPreferences preferences = await SharedPreferences.getInstance();
-  //       String? user_id = preferences.getString('user_id');
-  //       print('user_id ==> ${user_id}');
-  //       print('name ==> ${name}');
-  //       print('tag ==> ${tag}');
-  //       print('description ==> ${description}');
-  //       print('image ==> ${_imageWidget}');
-
-  //       var data = {
-  //         "user_id": user_id,
-  //         "name": nameController.text,
-  //         "tag": tagController.text,
-  //         "description": descriptionController.text,
-
-  //       };
-  //       var response = await http.post(urldata, body: data);
-  //       if (response.statusCode == 200) {
-  //         print('Response Success ==> ${response.body}');
-  //       } else {
-  //         print('Error Status Code ${response.statusCode}');
-  //       }
-  //     },
-  //   );
-  // }
-
-  // Future<void> insertPicture(Uint8List _bytesImgData,
-  //     {String dirName = 'img1'}) async {
-  //   String name = nameController.text;
-  //   String tag = tagController.text;
-  //   String description = descriptionController.text;
-  //   //flutter_project_web_supportandservice/Backend/server/backendlastversion/pictur_data/saveFile.php
-  //   String path = '$hosttravel/saveFile.php?dirName=$dirName';
-  //   print('path ==>> $path');
-
-  //   int i = Random().nextInt(100000000);
-  //   String fileName = 'img1_$i.jpg';
-  //   Map<String, dynamic> map = Map();
-  //   map['file'] = MultipartFile.fromBytes(_bytesImgData, filename: fileName);
-  //   FormData data = FormData.fromMap(map);
-  //   await dio
-  //       .post(
-  //     path,
-  //     data: data,
-  //   )
-  //       .then(
-  //     (value) {
-  //       dio.options.headers['content-Type'] = 'text/plain; charset=UTF-8';
-  //       dio.options.headers['Access-Control-Allow-Origin'] = '*';
-  //       dio.options.headers['Access-Control-Allow-Methods'] = 'GET , POST';
-  //       // print('Path Data ==> $fileName');
-  //       // image = 'Backend/server/Data/fileupload2/$fileName';
-  //       // image = fileName;
-  //       // print('image ==> $image');
-  //       String apiInsertData =
-  //           '$hostInsert/insertPicture.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=/$dirName/$fileName';
-  //       dio.get(apiInsertData).then(
-  //         (value) {
-  //           if (value.toString() == 'true') {
-  //             print('insert true');
-  //             Navigator.pop(context);
-  //           } else {
-  //             print('fail upload');
-  //           }
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 
   Future<void> ApiaddData(
     Uint8List _bytesImgData,
@@ -466,7 +371,7 @@ class _BodyState extends State<Body> {
       print('## name ==> 4 ## : $name');
       print('## tag ==> 4 ## : $tag');
       print('## image_description ==> 4 ## : $description');
-      String path = '${hostInsert}/savefileImage4.php';
+      String path = '$hostInsert/savefileImage4.php';
 
       String pathUser =
           '${hostlogin}/getuserwhereuser.php?isAdd=true&user_id=$user_id';
@@ -496,7 +401,7 @@ class _BodyState extends State<Body> {
               image = fileName;
               print('image ==> $image');
               String apiInsertData =
-                  '${hostInsert}/insert4.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
+                  '$hostInsert/insert4.php?isAdd=true&user_id=$user_id&name=$name&tag=$tag&description=$description&image=$image';
               dio.get(apiInsertData).then(
                 (value) {
                   if (value.toString() == 'true') {
@@ -527,99 +432,11 @@ class _BodyState extends State<Body> {
       (value) async {
         SharedPreferences preferences = await SharedPreferences.getInstance();
         String? user_id = preferences.getString('user_id');
-
-        // if (result != null) platformFile = result!.files.first;
-
-        // Uint8List? fileBytes = result!.files.first.bytes;
-        // String fileName =
-        //     // basename(file.path!);
-        //     result!.files.first.name;
-        // final contentType = mimeType != null ? MediaType.parse(mimeType) : null;
-
-        // final stream = http.ByteStream.fromBytes(fileBytes!);
-
-        // print('Name : ${fileName}');
-        // print('Bytes : ${fileBytes}');
-        // print('Size : ${platformFile!.size}');
-        // print('Extension : ${platformFile!.extension}');
-        // // print('Path : ${platformFile!.path}');
-
-        // print('picture ==> ${fileName}');
-
-        //print('# user_id ==> $user_id');
         processInsertMySQL(
           name: name,
           tag: tag,
           description: description,
         );
-        // print('Image ==> ${platformFile!.path}');
-        // if (value.toString() != 'null') {
-        //   print('## success');
-        //   processInsertMySQL(
-        //     name: name,
-        //     tag: tag,
-        //     description: description,
-        //   );
-
-        // if (file == null) {
-        //   //No image
-        //   processInsertMySQL(
-        //       name: name,
-        //       tag: tag,
-        //       description: description);
-        // } else {
-        // have image
-        // print('process upload image');
-        // print('Picture ==>$file ');
-        // String apiSaveImage =
-        //     'http://localhost/flutter_project_web_supportandservice/Backend/server/uptravel.php?isAdd=true&image=$stream';
-        // print('API Save Image ==> $apiSaveImage');
-        // int i = Random().nextInt(100000);
-        // String nameImage = '$i.jpg';
-
-        // Map<String, dynamic> map = Map();
-        // map['file'] =  http.MultipartFile.fromBytes(
-        //     'image', File.fromUri(Uri.parse(apiSaveImage)).readAsBytesSync(),
-        //     filename: file!.path, contentType: new MediaType('image', 'jpeg'));
-        // // map['file'] = await http.MultipartFile.fromBytes(file!.path,
-        // //     File.fromUri(Uri.parse(apiSaveImage)).readAsBytesSync(),
-        // //     filename: nameImage);
-        // var request = http.MultipartRequest('POST', Uri.parse(apiSaveImage));
-        // request.headers['Access-Control-Allow-Origin'] = "*";
-        // request.headers['Access-Control-Allow-Methods'] = "POST";
-        // request.headers['Access-Control-Allow-Headers'] = "Content-Type";
-        // request.fields['name'] = nameController.text;
-        // request.fields['tag'] = tagController.text;
-        // request.fields['description'] = descriptionController.text;
-        // map['file'] = http.MultipartFile(
-        //   'file',
-        //   stream,
-        //   platformFile!.size,
-        //   filename: fileName,
-        //   contentType: contentType,
-        // );
-        // request.files.add(multipartFile);
-        // FormData data = FormData(map);
-        // print('Data Form ==> ${data}');
-        // await http.post(
-        //   Uri.parse(apiSaveImage),
-        //   body: data,
-        //   encoding: Encoding.getByName("utf-8"),
-        //   headers: {"Content-Type": "multipart/form-data"},
-        // ).then(
-        //   (value) {
-        //     image = 'Backend/server/Data/fileupload2/$file';
-        //     print('image ==> $image');
-        //     processInsertMySQL(
-        //       name: name,
-        //       tag: tag,
-        //       description: description,
-        //       image: image,
-        //     );
-        //   },
-        // );
-        // }
-        // // }
       },
     );
   }
@@ -858,7 +675,6 @@ class _BodyState extends State<Body> {
               Center(
                 child: Text(
                   'เพิ่มข้อมูลรูปภาพ',
-                  // textAlign: TextAlign.center,
                   style: GoogleFonts.kanit(
                     textStyle: TextStyle(
                       color: Colors.black,
@@ -903,7 +719,6 @@ class _BodyState extends State<Body> {
                                   ),
                                   Container(
                                     width: size.width * 0.28,
-                                    // height: size.height * 0.1,
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -1047,9 +862,7 @@ class _BodyState extends State<Body> {
                                           keyboardType: TextInputType.multiline,
                                           textAlign: TextAlign.start,
                                           maxLines: 10,
-                                          // obscureText: true,
                                           decoration: InputDecoration(
-                                            // contentPadding: EdgeInsets.fromLTRB(10, 50, 10, 50),
                                             isDense: true,
                                             errorStyle: GoogleFonts.kanit(
                                               textStyle: TextStyle(
@@ -1146,8 +959,6 @@ class _BodyState extends State<Body> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     onPressed: () async {
-                                      // if (provider.file == null) return;
-                                      // provider.
                                       if (_formKey.currentState!.validate()) {
                                         if (name == null ||
                                             name.isEmpty ||
@@ -1161,22 +972,12 @@ class _BodyState extends State<Body> {
                                               context,
                                               'ไม่สามารถบันทึกข้อมูลได้',
                                               'กรุณากรอกข้อมูลของท่านให้ครบถ้วน');
-                                          // } else if (file == null) {
-                                          //   normalDialog(
-                                          //       context,
-                                          //       'ไม่สามารถอัพโหลดได้',
-                                          //       'กรุณากรอกข้อมูลให้ครบถ้วน');
+                                          } else if (_selectedFile == null) {
+                                            normalDialog(
+                                                context,
+                                                'ไม่สามารถอัพโหลดได้',
+                                                'กรุณากรอกข้อมูลให้ครบถ้วน');
                                         } else {
-                                          // String dirName = 'img1';
-                                          // if (topic_id == '1') {
-                                          //   dirName = 'Food';
-                                          // } else if (topic_id == '2') {
-                                          //   dirName = 'Travel';
-                                          // } else if (topic_id == '3') {
-                                          //   dirName = 'Signboard';
-                                          // } else {
-                                          //   dirName = 'Senario';
-                                          // }
                                           ApiaddData(_bytesData!);
                                         }
                                       }

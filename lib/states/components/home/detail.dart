@@ -1,6 +1,4 @@
 import 'package:flutter_project_web_supportandservice/responsive.dart';
-import 'package:flutter_project_web_supportandservice/states/Category/Categories.dart';
-import 'package:flutter_project_web_supportandservice/widget/search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -50,8 +48,6 @@ class Detail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // width: size.width *0.3,
-                        // height: size.height *0.3,
                         child: FittedBox(
                           child: Text(
                             'เครื่องมือสนับสนุนและบริการข้อมูล',
@@ -68,17 +64,6 @@ class Detail extends StatelessWidget {
                         image: AssetImage('images/pictureicon/logo.png'),
                         width: size.width * 0.13,
                         height: size.height * 0.13,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.01),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Searchandservice(),
-                            // Categories(),
-                          ],
-                        ),
                       ),
                     ],
                   ),
@@ -117,12 +102,9 @@ class Detail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // width: size.width *0.3,
-                        // height: size.height *0.3,
                         child: FittedBox(
                           child: Text(
                             'เครื่องมือสนับสนุนและบริการข้อมูล',
-                            // maxLines: 2,
                             style: GoogleFonts.kanit(
                               textStyle: TextStyle(
                                 fontSize: 27,
@@ -138,17 +120,6 @@ class Detail extends StatelessWidget {
                         image: AssetImage('images/pictureicon/logo.png'),
                         width: size.width * 0.10,
                         height: size.height * 0.10,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.04),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Searchandservice(),
-                            // Categories(),
-                          ],
-                        ),
                       ),
                     ],
                   ),
@@ -187,8 +158,6 @@ class Detail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // width: size.width *0.3,
-                        // height: size.height *0.3,
                         child: FittedBox(
                           child: Text(
                             'เครื่องมือสนับสนุนและบริการข้อมูล',
@@ -211,17 +180,6 @@ class Detail extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: size.height * 0.55),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Searchandservice(),
-                    // Categories(),
-                  ],
                 ),
               ),
             ],

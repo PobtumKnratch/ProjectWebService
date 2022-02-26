@@ -7,6 +7,7 @@ import 'package:flutter_project_web_supportandservice/states/components/home/dat
 import 'package:flutter_project_web_supportandservice/states/components/useredit/adduser.dart';
 import 'package:flutter_project_web_supportandservice/states/components/user/picture_components.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/form_useredit/add.dart';
+import 'package:flutter_project_web_supportandservice/states/components/useredit/title_headeredit.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editdata.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editpage.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editpersonal%20.dart';
@@ -26,6 +27,7 @@ final Map<String, WidgetBuilder> map = {
   '/aboutme': (BuildContext context) => AboutMePage(),
   '/addpicture': (BuildContext context) => Add(),
   '/datasearch': (BuildContext context) => DataSearch(),
+  '/titleheaderedit':(BuildContext context) => TitleHeaderEdit(),
 };
 
 String? initialRoute;
@@ -48,22 +50,18 @@ Future<void> main() async {
         initialRoute = '/homeuser';
         break;
       default:
-        // ignore: unnecessary_statements
         initialRoute = '/homeuseredit';
     }
   } else {
-    initialRoute = '/login';
+    initialRoute = '/homeuseredit';
   }
 
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // Future getUserData() => UserPreferences().getUser();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: map,

@@ -1,33 +1,28 @@
 <?php
+require '../../classes/connect.php';
 	header("Access-Control-Allow-Origin: *");
-	
 	header("Content-Type: application/json; charset=UTF-8");
-	
 	header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
-	
 	header("Access-Control-Max-Age: 3600");
-	
 	header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-	$servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "nectecpro";
-
-	$conn = new mysqli($servername, $username, $password, $dbname);
-
-	$requestMethod = $_SERVER["REQUEST_METHOD"];
-    // Check Connection
-    if($conn->connect_error){
-        die("Connection Failed: " . $conn->connect_error);
-        return;
-    }
-    $conn->set_charset("utf8");
+	if (!$link) {
+		echo "Error: Unable to connect to MySQL." . PHP_EOL;
+		echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+		echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+	
+		exit;
+	}
+	if (!$link->set_charset("utf8")) {
+		printf("Error loading character set utf8: %s\n", $link->error);
+		exit();
+	}
+    $link->set_charset("utf8");
 
 	 $idUser =$_GET['user_id'];
 
 	$sql = "SELECT * FROM fileupload where user_id = '$idUser'";
-	$result = $conn->query($sql);
+	$result = $link->query($sql);
 	$response = array();
 	if ($result->num_rows > 0) {
 		while($rowdata = $result->fetch_assoc()){
