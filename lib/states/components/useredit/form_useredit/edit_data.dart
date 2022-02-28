@@ -1,6 +1,7 @@
 import 'dart:html' as html;
 import 'dart:io';
 import 'dart:io' show File;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:math';
@@ -21,7 +22,12 @@ import 'package:flutter_project_web_supportandservice/Model/fileupload3.dart';
 import 'package:flutter_project_web_supportandservice/Model/fileupload4.dart';
 
 class EditData extends StatelessWidget {
-  // const UserEditPersonal({Key? key}) : super(key: key);
+  Upload? model1;
+  Upload2? model2;
+  Upload3? model3;
+  Upload4? model4;
+  EditData({Key? key, this.model1, this.model2, this.model3, this.model4})
+      : super(key: key);
   static const String routeName = '/editdata';
   late double opacity;
   double _scrollPosition = 0;
@@ -57,7 +63,12 @@ class EditData extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Body(),
+            Body(
+              model1: model1,
+              model2: model2,
+              model3: model3,
+              model4: model4,
+            ),
           ],
         ),
       ),
@@ -103,174 +114,179 @@ class _BodyState extends State<Body> {
   int selectIndex = 0;
   List<Upload> showModel = [];
 
-  Future<void> initData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? topic_ic = preferences.getString('topic_id');
-    if (topic_ic == '1') {
-      // List<Upload2> models2 = await editTravelupload2();
-      // print('length ===>>>> ${models2.length}');
-      // for (var item in models2) {
-      //   setState(() {
-      //     nameController.text = model!.name;
-      //     descriptionController.text = model!.description;
-      //     tagController.text = model!.name;
-      //   });
-      List<Upload2> models;
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String id = preferences.getString('id')!;
-      final url =
-          'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/EditData/getdata2.php?id=$id';
-      final response = await http.get(Uri.parse(url));
-      print(response);
-      if (response.statusCode == 200) {
-        // return upload2FromJson(response.body);
-        // print(response.body);
-        for (var item in json.decode(response.body)) {
-          setState(() {
-            models = Upload2.fromMap(item) as List<Upload2>;
-            nameController.text = model!.name;
-            descriptionController.text = model!.description;
-            tagController.text = model!.name;
-          });
-        }
-      } else {
-        throw Exception(response.hashCode);
-      }
-      // showModel.add(Upload(
-      //     title: 'หมวดหมู่การท่องเที่ยว',
-      //     id: item.id,
-      //     user_id: item.user_id,
-      //     name: item.name,
-      //     description: item.description,
-      //     image: 'fileupload2/${item.image}',
-      //     date: item.date,
-      //     tag: item.tag));
-      // }
-    } else if (topic_ic == '2') {
-      List<Upload> models;
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String id = preferences.getString('id')!;
-      final url =
-          'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/EditData/getdata.php?id=$id';
-      final response = await http.get(Uri.parse(url));
-      print(response);
-      if (response.statusCode == 200) {
-        // return upload2FromJson(response.body);
-        // print(response.body);
-        for (var item in json.decode(response.body)) {
-          setState(() {
-            models = Upload.fromMap(item) as List<Upload>;
-            nameController.text = model!.name;
-            descriptionController.text = model!.description;
-            tagController.text = model!.name;
-          });
-        }
-      } else {
-        throw Exception(response.hashCode);
-      }
-      // List<Upload> models = await editFoodupload();
-      // print('length ===>>>> ${models.length}');
-      // for (var item in models) {
-      //   setState(() {
-      //     nameController.text = model!.name;
-      //     descriptionController.text = model!.description;
-      //     tagController.text = model!.name;
-      //   });
-      // showModel.add(Upload(
-      //     title: 'หมวดหมู่อาหาร',
-      //     id: item.id,
-      //     user_id: item.user_id,
-      //     name: item.name,
-      //     description: item.description,
-      //     image: 'fileupload/${item.image}',
-      //     date: item.date,
-      //     tag: item.tag));
-      // }
-    } else if (topic_ic == '3') {
-      List<Upload3> models;
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String id = preferences.getString('id')!;
-      final url =
-          'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/EditData/getdata3.php?id=$id';
-      final response = await http.get(Uri.parse(url));
-      print(response);
-      if (response.statusCode == 200) {
-        // return upload2FromJson(response.body);
-        // print(response.body);
-        for (var item in json.decode(response.body)) {
-          setState(() {
-            models = Upload3.fromMap(item) as List<Upload3>;
-            nameController.text = model!.name;
-            descriptionController.text = model!.description;
-            tagController.text = model!.name;
-          });
-        }
-      } else {
-        throw Exception(response.hashCode);
-      }
-      // List<Upload3> models3 = await editSignboardupload3();
-      // print('length ===>>>> ${models3.length}');
-      // for (var item in models3) {
-      //   setState(() {
-      //     nameController.text = model!.name;
-      //     descriptionController.text = model!.description;
-      //     tagController.text = model!.name;
-      //   });
-      // showModel.add(Upload(
-      //     title: 'ป้ายสถานที่ท่องเที่ยวต่างๆ',
-      //     id: item.id,
-      //     user_id: item.user_id,
-      //     name: item.name,
-      //     description: item.description,
-      //     image: 'fileupload3/${item.image}',
-      //     date: item.date,
-      //     tag: item.tag));
-      // }
-    } else if (topic_ic == '4') {
-      List<Upload4> models;
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      String id = preferences.getString('id')!;
-      final url =
-          'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/EditData/getdata4.php?id=$id';
-      final response = await http.get(Uri.parse(url)).then((value) {
-        print('valur 4 ===> $value');
-        for (var item in json.decode(value.body)) {
-          setState(() {
-            model = Upload4.fromMap(item) as Upload?;
-            nameController.text = model!.name;
-            descriptionController.text = model!.description;
-            tagController.text = model!.name;
-          });
-        }
-      });
-      // print(response);
-      // if (response.statusCode == 200) {
-      // return upload2FromJson(response.body);
-      // print(response.body);
+  var _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController tagController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
-      // } else {
-      //   throw Exception(response.hashCode);
-      // }
-      // List<Upload4> models4 = await editScenarioupload4();
-      // print('length ===>>>> ${models4.length}');
-      // for (var item in models4) {
-      //   setState(() {
-      //     nameController.text = model!.name;
-      //     descriptionController.text = model!.description;
-      //     tagController.text = model!.name;
-      //   });
-      // showModel.add(Upload(
-      //     title: 'หมวดหมู่ตามสถานการณ์',
-      //     id: item.id,
-      //     user_id: item.user_id,
-      //     name: item.name,
-      //     description: item.description,
-      //     image: 'fileupload4/${item.image}',
-      //     date: item.date,
-      //     tag: item.tag));
-      // }
-    }
-  }
+  // Future<void> initData() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   String? topic_ic = preferences.getString('topic_id');
+  //   if (topic_ic == '1') {
+  //     // List<Upload2> models2 = await editTravelupload2();
+  //     // print('length ===>>>> ${models2.length}');
+  //     // for (var item in models2) {
+  //     //   setState(() {
+  //     //     nameController.text = model!.name;
+  //     //     descriptionController.text = model!.description;
+  //     //     tagController.text = model!.name;
+  //     //   });
+  //     List<Upload2> models;
+  //     SharedPreferences preferences = await SharedPreferences.getInstance();
+  //     String id = preferences.getString('id')!;
+  //     final url =
+  //         'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/EditData/getdata2.php?id=$id';
+  //     final response = await http.get(Uri.parse(url));
+  //     print(response);
+  //     if (response.statusCode == 200) {
+  //       // return upload2FromJson(response.body);
+  //       // print(response.body);
+  //       for (var item in json.decode(response.body)) {
+  //         setState(() {
+  //           models = Upload2.fromMap(item) as List<Upload2>;
+  //           nameController.text = model!.name;
+  //           descriptionController.text = model!.description;
+  //           tagController.text = model!.name;
+  //         });
+  //       }
+  //     } else {
+  //       throw Exception(response.hashCode);
+  //     }
+  //     // showModel.add(Upload(
+  //     //     title: 'หมวดหมู่การท่องเที่ยว',
+  //     //     id: item.id,
+  //     //     user_id: item.user_id,
+  //     //     name: item.name,
+  //     //     description: item.description,
+  //     //     image: 'fileupload2/${item.image}',
+  //     //     date: item.date,
+  //     //     tag: item.tag));
+  //     // }
+  //   } else if (topic_ic == '2') {
+  //     List<Upload> models;
+  //     SharedPreferences preferences = await SharedPreferences.getInstance();
+  //     String id = preferences.getString('id')!;
+  //     final url =
+  //         'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/EditData/getdata.php?id=$id';
+  //     final response = await http.get(Uri.parse(url));
+  //     print(response);
+  //     if (response.statusCode == 200) {
+  //       // return upload2FromJson(response.body);
+  //       // print(response.body);
+  //       for (var item in json.decode(response.body)) {
+  //         setState(() {
+  //           models = Upload.fromMap(item) as List<Upload>;
+  //           nameController.text = model!.name;
+  //           descriptionController.text = model!.description;
+  //           tagController.text = model!.name;
+  //         });
+  //       }
+  //     } else {
+  //       throw Exception(response.hashCode);
+  //     }
+  //     // List<Upload> models = await editFoodupload();
+  //     // print('length ===>>>> ${models.length}');
+  //     // for (var item in models) {
+  //     //   setState(() {
+  //     //     nameController.text = model!.name;
+  //     //     descriptionController.text = model!.description;
+  //     //     tagController.text = model!.name;
+  //     //   });
+  //     // showModel.add(Upload(
+  //     //     title: 'หมวดหมู่อาหาร',
+  //     //     id: item.id,
+  //     //     user_id: item.user_id,
+  //     //     name: item.name,
+  //     //     description: item.description,
+  //     //     image: 'fileupload/${item.image}',
+  //     //     date: item.date,
+  //     //     tag: item.tag));
+  //     // }
+  //   } else if (topic_ic == '3') {
+  //     List<Upload3> models;
+  //     SharedPreferences preferences = await SharedPreferences.getInstance();
+  //     String id = preferences.getString('id')!;
+  //     final url =
+  //         'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/EditData/getdata3.php?id=$id';
+  //     final response = await http.get(Uri.parse(url));
+  //     print(response);
+  //     if (response.statusCode == 200) {
+  //       // return upload2FromJson(response.body);
+  //       // print(response.body);
+  //       for (var item in json.decode(response.body)) {
+  //         setState(() {
+  //           models = Upload3.fromMap(item) as List<Upload3>;
+  //           nameController.text = model!.name;
+  //           descriptionController.text = model!.description;
+  //           tagController.text = model!.name;
+  //         });
+  //       }
+  //     } else {
+  //       throw Exception(response.hashCode);
+  //     }
+  //     // List<Upload3> models3 = await editSignboardupload3();
+  //     // print('length ===>>>> ${models3.length}');
+  //     // for (var item in models3) {
+  //     //   setState(() {
+  //     //     nameController.text = model!.name;
+  //     //     descriptionController.text = model!.description;
+  //     //     tagController.text = model!.name;
+  //     //   });
+  //     // showModel.add(Upload(
+  //     //     title: 'ป้ายสถานที่ท่องเที่ยวต่างๆ',
+  //     //     id: item.id,
+  //     //     user_id: item.user_id,
+  //     //     name: item.name,
+  //     //     description: item.description,
+  //     //     image: 'fileupload3/${item.image}',
+  //     //     date: item.date,
+  //     //     tag: item.tag));
+  //     // }
+  //   } else if (topic_ic == '4') {
+  //     List<Upload4> models;
+  //     SharedPreferences preferences = await SharedPreferences.getInstance();
+  //     String id = preferences.getString('id')!;
+  //     final url =
+  //         'http://localhost/flutter_project_web_supportandservice/Backend/server/Data/EditData/getdata4.php?id=$id';
+  //     final response = await http.get(Uri.parse(url)).then((value) {
+  //       print('valur 4 ===> $value');
+  //       for (var item in json.decode(value.body)) {
+  //         setState(() {
+  //           model = Upload4.fromMap(item) as Upload?;
+  //           nameController.text = model!.name;
+  //           descriptionController.text = model!.description;
+  //           tagController.text = model!.name;
+  //         });
+  //       }
+  //     });
+  //     // print(response);
+  //     // if (response.statusCode == 200) {
+  //     // return upload2FromJson(response.body);
+  //     // print(response.body);
+
+  //     // } else {
+  //     //   throw Exception(response.hashCode);
+  //     // }
+  //     // List<Upload4> models4 = await editScenarioupload4();
+  //     // print('length ===>>>> ${models4.length}');
+  //     // for (var item in models4) {
+  //     //   setState(() {
+  //     //     nameController.text = model!.name;
+  //     //     descriptionController.text = model!.description;
+  //     //     tagController.text = model!.name;
+  //     //   });
+  //     // showModel.add(Upload(
+  //     //     title: 'หมวดหมู่ตามสถานการณ์',
+  //     //     id: item.id,
+  //     //     user_id: item.user_id,
+  //     //     name: item.name,
+  //     //     description: item.description,
+  //     //     image: 'fileupload4/${item.image}',
+  //     //     date: item.date,
+  //     //     tag: item.tag));
+  //     // }
+  //   }
+  // }
 
   @override
   void initState() {
@@ -281,7 +297,7 @@ class _BodyState extends State<Body> {
           user_id: widget.model1!.user_id,
           name: widget.model1!.name,
           description: widget.model1!.description,
-          image: 'fileupload2/${widget.model1!.image}',
+          image: '${widget.model1!.image}',
           date: widget.model1!.date,
           tag: widget.model1!.tag);
     } else if (widget.model2 != null) {
@@ -291,7 +307,7 @@ class _BodyState extends State<Body> {
           user_id: widget.model2!.user_id,
           name: widget.model2!.name,
           description: widget.model2!.description,
-          image: 'fileupload/${widget.model2!.image}',
+          image: '${widget.model2!.image}',
           date: widget.model2!.date,
           tag: widget.model2!.tag);
     } else if (widget.model3 != null) {
@@ -301,7 +317,7 @@ class _BodyState extends State<Body> {
           user_id: widget.model3!.user_id,
           name: widget.model3!.name,
           description: widget.model3!.description,
-          image: 'fileupload3/${widget.model3!.image}',
+          image: '${widget.model3!.image}',
           date: widget.model3!.date,
           tag: widget.model3!.tag);
     } else {
@@ -311,30 +327,30 @@ class _BodyState extends State<Body> {
           user_id: widget.model4!.user_id,
           name: widget.model4!.name,
           description: widget.model4!.description,
-          image: 'fileupload4/${widget.model4!.image}',
+          image: '${widget.model4!.image}',
           date: widget.model4!.date,
           tag: widget.model4!.tag);
     }
+    print(model);
+    nameController = TextEditingController(text: model!.name);
+    tagController = TextEditingController(text: model!.tag);
+    descriptionController = TextEditingController(text: model!.description);
+
     super.initState();
-    findUser();
-    initData();
+    // findUser();
+    // initData();
   }
 
-  Future<Null> findUser() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(
-      () {
-        user_id = preferences.getString('user_id');
-        topic_id = preferences.getString('topic_id');
-        token = preferences.getString('token');
-      },
-    );
-  }
-
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController tagController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  // Future<Null> findUser() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   setState(
+  //     () {
+  //       user_id = preferences.getString('user_id');
+  //       topic_id = preferences.getString('topic_id');
+  //       token = preferences.getString('token');
+  //     },
+  //   );
+  // }
 
   startWebFilePicker() async {
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
@@ -576,27 +592,33 @@ class _BodyState extends State<Body> {
 
   Widget showImage(BuildContext context) {
     // ignore: unused_local_variable
-    double size = MediaQuery.of(context).size.height * 0.4;
+    print('$hostpic/${model!.image}');
+    double size = MediaQuery.of(context).size.width;
     return Container(
-      child: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              top: 7,
-            ),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.4,
-              height: MediaQuery.of(context).size.height * 0.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(7.0),
-                border: Border.all(color: Colors.black45, width: 1.2),
-              ),
-              child: Image.memory(
-                _bytesData!,
-              ),
-            ),
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: 7,
+        ),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.4,
+          height: MediaQuery.of(context).size.height * 0.5,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(7.0),
+            border: Border.all(color: Colors.black45, width: 1.2),
           ),
-        ],
+          child: Stack(
+            children: [
+              model!.image != null
+                  ? CachedNetworkImage(imageUrl: '$hostpic/${model!.image}')
+                  : Image.memory(_bytesData!)
+              // Container(
+              //   child: model == null
+              //       ? Text('ไม่พบข้อมูลรูปภาพ')
+              //       : Image.memory(_bytesData!),
+              // ),
+            ],
+          ),
+        ),
       ),
     );
   }

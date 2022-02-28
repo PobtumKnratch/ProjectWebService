@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
-import 'package:flutter_project_web_supportandservice/states/Category/Categories.dart';
+import 'package:flutter_project_web_supportandservice/states/components/useredit/CategoryEdit/CategoriesEdit.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editpage.dart';
 import 'package:flutter_project_web_supportandservice/widget/draweruseredit.dart';
 import 'package:flutter_project_web_supportandservice/widget/headeruseredit.dart';
@@ -89,7 +89,7 @@ class isMobileContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             UserEditPage(),
-            Categories(),
+            CategoriesEdit(),
           ],
         ),
       ),
@@ -120,7 +120,7 @@ class isTabletContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             UserEditPage(),
-            Categories(),
+            CategoriesEdit(),
           ],
         ),
       ),
@@ -149,7 +149,7 @@ class isDesktopContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             UserEditPage(),
-            Categories(),
+            CategoriesEdit(),
           ],
         ),
       ),

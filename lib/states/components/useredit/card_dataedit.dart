@@ -364,19 +364,26 @@ class _CardDataEditState extends State<CardDataEdit> {
                               ],
                             ),
                             Text(
-                              'คำอธิบายรูปภาพ : ',
+                              'คำอธิบายรูปภาพ ',
                               style: GoogleFonts.kanit(
                                 textStyle: TextStyle(
                                   fontSize: sizeWidth * 0.012,
                                 ),
                               ),
                             ),
-                            Text(
-                              getEndl(widget.model.description),
-                              // widget.model.description,
-                              style: GoogleFonts.kanit(
-                                textStyle: TextStyle(
-                                  fontSize: sizeWidth * 0.012,
+                            Flexible(
+                              child: Container(
+                                width: size.width * 0.5,
+                                child: Text(
+                                  widget.model.description,
+                                  // widget.model.description,
+                                  style: GoogleFonts.kanit(
+                                    textStyle: TextStyle(
+                                      fontSize: sizeWidth * 0.012,
+                                    ),
+                                  ),
+                                  maxLines: 5,
+                                  textAlign: TextAlign.left,
                                 ),
                               ),
                             ),
@@ -581,20 +588,25 @@ class _CardDataEditState extends State<CardDataEdit> {
                               ],
                             ),
                             Text(
-                              'คำอธิบายรูปภาพ : ',
+                              'คำอธิบายรูปภาพ  ',
                               style: GoogleFonts.kanit(
                                 textStyle: TextStyle(
                                   fontSize: sizeWidth * 0.012,
                                 ),
                               ),
                             ),
-                            Text(
-                              getEndl(widget.model.description),
-                              // widget.model.description,
-                              style: GoogleFonts.kanit(
-                                textStyle: TextStyle(
-                                  fontSize: sizeWidth * 0.012,
+                            Container(
+                              width: size.width * 0.31,
+                              child: Text(
+                                cutWord(widget.model.description,),
+                                // widget.model.description,
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    fontSize: sizeWidth * 0.012,
+                                  ),
                                 ),
+                                maxLines: 5,
+                                textAlign: TextAlign.left,
                               ),
                             ),
                           ],
@@ -602,73 +614,73 @@ class _CardDataEditState extends State<CardDataEdit> {
                       ),
                     ],
                   ),
-                  Spacer(),
-                  ButtonTheme(
-                    child: ButtonBar(
-                      children: <Widget>[
-                        Container(
-                          width: size.height * 0.15,
-                          margin: EdgeInsets.all(5),
-                          height: size.height * 0.05,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              side: BorderSide(
-                                color: Color.fromARGB(255, 216, 184, 0),
-                              ),
-                            ),
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditData(),
-                              ),
-                            ),
-                            padding: EdgeInsets.all(10.0),
-                            color: Color.fromARGB(255, 216, 184, 0),
-                            textColor: Colors.white,
-                            child: Text(
-                              "แก้ไขข้อมูล",
-                              style: GoogleFonts.kanit(
-                                textStyle: TextStyle(
-                                  fontSize: sizeWidth * 0.01,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 5,
-                          ),
-                          child: Container(
-                            width: size.height * 0.15,
-                            margin: EdgeInsets.all(5),
-                            height: size.height * 0.05,
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                side: BorderSide(
-                                  color: Color.fromARGB(255, 192, 0, 0),
-                                ),
-                              ),
-                              onPressed: () {},
-                              padding: EdgeInsets.all(10.0),
-                              color: Color.fromARGB(255, 192, 0, 0),
-                              textColor: Colors.white,
-                              child: Text(
-                                'ลบข้อมูล',
-                                style: GoogleFonts.kanit(
-                                  textStyle: TextStyle(
-                                    fontSize: sizeWidth * 0.01,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Spacer(),
+                  // ButtonTheme(
+                  //   child: ButtonBar(
+                  //     children: <Widget>[
+                  //       Container(
+                  //         width: size.height * 0.15,
+                  //         margin: EdgeInsets.all(5),
+                  //         height: size.height * 0.05,
+                  //         child: RaisedButton(
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(15.0),
+                  //             side: BorderSide(
+                  //               color: Color.fromARGB(255, 216, 184, 0),
+                  //             ),
+                  //           ),
+                  //           onPressed: () => Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //                 builder: (context) =>
+                  //                     EditData(model1: widget.model)),
+                  //           ),
+                  //           padding: EdgeInsets.all(10.0),
+                  //           color: Color.fromARGB(255, 216, 184, 0),
+                  //           textColor: Colors.white,
+                  //           child: Text(
+                  //             "แก้ไขข้อมูล",
+                  //             style: GoogleFonts.kanit(
+                  //               textStyle: TextStyle(
+                  //                 fontSize: sizeWidth * 0.01,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       Padding(
+                  //         padding: EdgeInsets.only(
+                  //           left: 5,
+                  //         ),
+                  //         child: Container(
+                  //           width: size.height * 0.15,
+                  //           margin: EdgeInsets.all(5),
+                  //           height: size.height * 0.05,
+                  //           child: RaisedButton(
+                  //             shape: RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(15.0),
+                  //               side: BorderSide(
+                  //                 color: Color.fromARGB(255, 192, 0, 0),
+                  //               ),
+                  //             ),
+                  //             onPressed: () {},
+                  //             padding: EdgeInsets.all(10.0),
+                  //             color: Color.fromARGB(255, 192, 0, 0),
+                  //             textColor: Colors.white,
+                  //             child: Text(
+                  //               'ลบข้อมูล',
+                  //               style: GoogleFonts.kanit(
+                  //                 textStyle: TextStyle(
+                  //                   fontSize: sizeWidth * 0.01,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -703,4 +715,13 @@ class _CardDataEditState extends State<CardDataEdit> {
     }
     return t;
   }
+  String cutWord(String name) {
+    String result = name;
+    if (result.length > 100) {
+      result = result.substring(0, 100);
+      result = '$result ..เพิ่มเติม';
+    }
+    return result;
+  }
 }
+

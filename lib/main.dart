@@ -7,6 +7,7 @@ import 'package:flutter_project_web_supportandservice/states/components/home/dat
 import 'package:flutter_project_web_supportandservice/states/components/useredit/adduser.dart';
 import 'package:flutter_project_web_supportandservice/states/components/user/picture_components.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/form_useredit/add.dart';
+import 'package:flutter_project_web_supportandservice/states/components/useredit/form_useredit/edit_data.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/title_headeredit.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editdata.dart';
 import 'package:flutter_project_web_supportandservice/states/components/useredit/user_editpage.dart';
@@ -22,7 +23,7 @@ final Map<String, WidgetBuilder> map = {
   // '/homeuseranno': (BuildContext context) => HomeUserAnno(),
   '/usereditpage': (BuildContext context) => UserEditPage(),
   '/usereditpersonal': (BuildContext context) => UserEditPersonal(),
-  '/usereditdata': (BuildContext context) => UserEditData(),
+  '/usereditdata': (BuildContext context) => EditData(),
   '/picturecomponents': (BuildContext context) => PictureComponents(),
   '/aboutme': (BuildContext context) => AboutMePage(),
   '/addpicture': (BuildContext context) => Add(),

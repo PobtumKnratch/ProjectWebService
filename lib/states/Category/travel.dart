@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_web_supportandservice/Model/fileupload.dart';
 import 'package:flutter_project_web_supportandservice/responsive.dart';
 import 'package:flutter_project_web_supportandservice/states/components/user/picture_components.dart';
 import 'package:flutter_project_web_supportandservice/widget/max_width_contanier.dart';
@@ -14,8 +15,10 @@ import '../../widget/constants.dart';
 
 class Travel extends StatefulWidget {
   List<Upload2> models;
+  // Upload model;
   Travel({
     required this.models,
+    // required this.model,
     Key? key,
   }) : super(key: key);
   @override
@@ -29,7 +32,7 @@ class _TravelState extends State<Travel> {
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
   double _opacity = 0;
-
+  DateTime? date;
   mockFetch() async {
     if (allLoaded) {
       return;
@@ -50,6 +53,8 @@ class _TravelState extends State<Travel> {
   @override
   void initState() {
     super.initState();
+    // date = DateTime.parse(widget.models.date);
+    print(date);
     mockFetch();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -89,7 +94,6 @@ class _TravelState extends State<Travel> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   Container(
                     height: size.height,
                     child: FutureBuilder<List<Upload2>>(
@@ -106,11 +110,16 @@ class _TravelState extends State<Travel> {
                             crossAxisCount: 2,
                             itemCount: widget.models.length,
                             itemBuilder: (context, index) {
-                              final upload = snapshot.data![index];
+                              // final upload = snapshot.data![index];
                               return GestureDetector(
                                 onTap: () {
-                                  showDialogTravel(context, upload.image,
-                                      upload.name, upload.date);
+                                  showDialogTravel(
+                                      context,
+                                      widget.models[index].image,
+                                      widget.models[index].name,
+                                      widget.models[index].tag,
+                                      date,
+                                      widget.models[index].description);
                                 },
                                 child: Padding(
                                   padding:
@@ -227,7 +236,6 @@ class _TravelState extends State<Travel> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   Container(
                     height: size.height,
                     child: FutureBuilder<List<Upload2>>(
@@ -247,8 +255,13 @@ class _TravelState extends State<Travel> {
                               final upload = snapshot.data![index];
                               return GestureDetector(
                                 onTap: () {
-                                  showDialogTravel(context, upload.image,
-                                      upload.name, upload.date);
+                                  showDialogTravel(
+                                      context,
+                                      widget.models[index].image,
+                                      widget.models[index].name,
+                                      widget.models[index].tag,
+                                      widget.models[index].date,
+                                      widget.models[index].description);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -387,8 +400,13 @@ class _TravelState extends State<Travel> {
                               final upload = snapshot.data![index];
                               return GestureDetector(
                                 onTap: () {
-                                  showDialogTravel(context, upload.image,
-                                      upload.name, upload.date);
+                                  showDialogTravel(
+                                      context,
+                                      widget.models[index].image,
+                                      widget.models[index].name,
+                                      widget.models[index].tag,
+                                      widget.models[index].date,
+                                      widget.models[index].description);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -500,7 +518,7 @@ class _TravelState extends State<Travel> {
     );
   }
 
-  showDialogTravel(context, uploadimage, uploadname, uploaddate) {
+  showDialogTravel(context, uploadimage, uploadname, tag, date, description) {
     var size = MediaQuery.of(context).size;
     _opacity = _scrollPosition < size.height * 0.40
         ? _scrollPosition / (size.height * 0.40)
@@ -537,72 +555,110 @@ class _TravelState extends State<Travel> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    // top: size.height * 0.01,
-                                    left: size.height * 0.02),
-                                child: Text(
-                                  uploadname,
-                                  style: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                ),
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Icon(
+                                Icons.wrong_location_rounded,
+                                color: Colors.greenAccent,
+                                size: 18,
                               ),
-                              Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: size.height * 0.01,
-                                    right: size.height * 0.02),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.close,
-                                    size: 14,
-                                    color: Colors.black54,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Text(
+                                'ชื่อรูปภาพ : ',
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
                                   ),
-                                  // onPressed: () async {
-                                  //   SharedPreferences preferences =
-                                  //       await SharedPreferences.getInstance();
-                                  //   preferences.clear().then(
-                                  //         (value) =>
-                                  //             Navigator.pushNamedAndRemoveUntil(
-                                  //                 context,
-                                  //                 '/picturecomponents',
-                                  //                 (route) => false),
-                                  //       );
-                                  // },
-                                  // onPressed: () => Navigator.of(context).pop(null),
-                                  // onPressed: () {
-                                  //   Navigator.of(context).maybePop();
-                                  // },
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            PictureComponents(),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: size.height * 0.001,
-                                left: size.height * 0.02,
-                                bottom: size.height * 0.03),
-                            child: Text(
-                              'Golfy.theerawee@gmail.com',
-                              style: GoogleFonts.kanit(
-                                textStyle: TextStyle(
-                                  fontSize: 10,
                                 ),
                               ),
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.01),
+                              child: Text(
+                                uploadname,
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Spacer(),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  right: size.height * 0.02),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 25,
+                                  color: Colors.black54,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          PictureComponents(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Icon(
+                                Icons.tag,
+                                color: Colors.greenAccent,
+                                size: 18,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  // top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Text(
+                                'แฮชแท็ก : ',
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  // top: size.height * 0.01,
+                                  left: size.height * 0.01),
+                              child: Text(
+                                tag,
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                           Padding(
                             padding: EdgeInsets.symmetric(
                               horizontal: 10,
@@ -659,7 +715,7 @@ class _TravelState extends State<Travel> {
                                   width: 3,
                                 ),
                                 Text(
-                                  uploaddate.toString(),
+                                  date.toString(),
                                   style: GoogleFonts.kanit(
                                     textStyle: TextStyle(
                                       fontSize: 10,
@@ -772,9 +828,11 @@ class _TravelState extends State<Travel> {
                                           onTap: () {
                                             showDialogTravel(
                                                 context,
-                                                upload.image,
-                                                upload.name,
-                                                upload.date);
+                                                uploadimage,
+                                                uploadname,
+                                                tag,
+                                                date,
+                                                description);
                                           },
                                           child: Container(
                                             alignment: Alignment.center,
@@ -818,39 +876,6 @@ class _TravelState extends State<Travel> {
                                                           ),
                                                         ),
                                                       ),
-                                                      // Padding(
-                                                      //   padding: EdgeInsets.only(
-                                                      //       top: size.height * 0.25),
-                                                      //   child: GridTile(
-                                                      //     footer: Material(
-                                                      //       color: Colors.transparent,
-                                                      //       shape: RoundedRectangleBorder(
-                                                      //         borderRadius:
-                                                      //             BorderRadius.vertical(
-                                                      //           bottom: Radius.circular(15),
-                                                      //         ),
-                                                      //       ),
-                                                      //       clipBehavior: Clip.antiAlias,
-                                                      //     ),
-                                                      //     child: GridTileBar(
-                                                      //       // backgroundColor: Colors.black12,
-                                                      //       title: Text(
-                                                      // cutWord('${upload.name}'),
-                                                      //         textAlign: TextAlign.center,
-                                                      //         softWrap: true,
-                                                      //         style: TextStyle(
-                                                      //           fontSize: 18,
-                                                      //         ),
-                                                      //       ),
-                                                      //       subtitle: Text(
-                                                      //         '${upload.date}',
-                                                      //         textAlign: TextAlign.center,
-                                                      //         softWrap: true,
-                                                      //         style: TextStyle(fontSize: 18),
-                                                      //       ),
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
@@ -972,12 +997,37 @@ class _TravelState extends State<Travel> {
                               padding: EdgeInsets.only(
                                   top: size.height * 0.01,
                                   left: size.height * 0.02),
+                              child: Icon(
+                                Icons.wrong_location_rounded,
+                                color: Colors.greenAccent,
+                                size: 18,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Text(
+                                'ชื่อรูปภาพ : ',
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.01),
                               child: Text(
                                 uploadname,
                                 style: GoogleFonts.kanit(
                                   textStyle: TextStyle(
-                                      // fontSize: 35,
-                                      ),
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
@@ -992,21 +1042,6 @@ class _TravelState extends State<Travel> {
                                   size: 25,
                                   color: Colors.black54,
                                 ),
-                                // onPressed: () async {
-                                //   SharedPreferences preferences =
-                                //       await SharedPreferences.getInstance();
-                                //   preferences.clear().then(
-                                //         (value) =>
-                                //             Navigator.pushNamedAndRemoveUntil(
-                                //                 context,
-                                //                 '/picturecomponents',
-                                //                 (route) => false),
-                                //       );
-                                // },
-                                // onPressed: () => Navigator.of(context).pop(null),
-                                // onPressed: () {
-                                //   Navigator.of(context).maybePop();
-                                // },
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
@@ -1019,18 +1054,47 @@ class _TravelState extends State<Travel> {
                             )
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.001,
-                              left: size.height * 0.02),
-                          child: Text(
-                            'Golfy.theerawee@gmail.com',
-                            style: GoogleFonts.kanit(
-                              textStyle: TextStyle(
-                                  // fontSize: 35,
-                                  ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Icon(
+                                Icons.tag,
+                                color: Colors.greenAccent,
+                                size: 18,
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  // top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Text(
+                                'แฮชแท็ก : ',
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  // top: size.height * 0.01,
+                                  left: size.height * 0.01),
+                              child: Text(
+                                tag,
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: EdgeInsets.only(
@@ -1086,7 +1150,7 @@ class _TravelState extends State<Travel> {
                                 width: 3,
                               ),
                               Text(
-                                uploaddate.toString(),
+                                date.toString(),
                                 style: GoogleFonts.kanit(
                                   textStyle: TextStyle(
                                       // fontSize: 35,
@@ -1202,9 +1266,11 @@ class _TravelState extends State<Travel> {
                                         onTap: () {
                                           showDialogTravel(
                                               context,
-                                              upload.image,
-                                              upload.name,
-                                              upload.date);
+                                              uploadimage,
+                                              uploadname,
+                                              tag,
+                                              date,
+                                              description);
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -1250,39 +1316,6 @@ class _TravelState extends State<Travel> {
                                                           ),
                                                         ),
                                                       ),
-                                                      // Padding(
-                                                      //   padding: EdgeInsets.only(
-                                                      //       top: size.height * 0.25),
-                                                      //   child: GridTile(
-                                                      //     footer: Material(
-                                                      //       color: Colors.transparent,
-                                                      //       shape: RoundedRectangleBorder(
-                                                      //         borderRadius:
-                                                      //             BorderRadius.vertical(
-                                                      //           bottom: Radius.circular(15),
-                                                      //         ),
-                                                      //       ),
-                                                      //       clipBehavior: Clip.antiAlias,
-                                                      //     ),
-                                                      //     child: GridTileBar(
-                                                      //       // backgroundColor: Colors.black12,
-                                                      //       title: Text(
-                                                      // cutWord('${upload.name}'),
-                                                      //         textAlign: TextAlign.center,
-                                                      //         softWrap: true,
-                                                      //         style: TextStyle(
-                                                      //           fontSize: 18,
-                                                      //         ),
-                                                      //       ),
-                                                      //       subtitle: Text(
-                                                      //         '${upload.date}',
-                                                      //         textAlign: TextAlign.center,
-                                                      //         softWrap: true,
-                                                      //         style: TextStyle(fontSize: 18),
-                                                      //       ),
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
@@ -1369,17 +1402,14 @@ class _TravelState extends State<Travel> {
           ),
           desktop: SingleChildScrollView(
             clipBehavior: Clip.antiAlias,
-            // shrinkWrap: true,
             primary: false,
             physics: BouncingScrollPhysics(),
             child: Container(
-              // height: size.height*5,
               child: Center(
                 child: Material(
                   clipBehavior: Clip.antiAlias,
                   borderRadius: BorderRadius.circular(15),
                   color: Colors.transparent,
-                  // type: MaterialType.transparency,
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
@@ -1387,7 +1417,6 @@ class _TravelState extends State<Travel> {
                     ),
                     padding: EdgeInsets.all(15),
                     width: size.width * 0.59,
-                    // height: size.height,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1398,12 +1427,37 @@ class _TravelState extends State<Travel> {
                               padding: EdgeInsets.only(
                                   top: size.height * 0.01,
                                   left: size.height * 0.02),
+                              child: Icon(
+                                Icons.wrong_location_rounded,
+                                color: Colors.greenAccent,
+                                size: 18,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Text(
+                                'ชื่อรูปภาพ : ',
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.01),
                               child: Text(
                                 uploadname,
                                 style: GoogleFonts.kanit(
                                   textStyle: TextStyle(
-                                      // fontSize: 35,
-                                      ),
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
@@ -1418,21 +1472,6 @@ class _TravelState extends State<Travel> {
                                   size: 25,
                                   color: Colors.black54,
                                 ),
-                                // onPressed: () async {
-                                //   SharedPreferences preferences =
-                                //       await SharedPreferences.getInstance();
-                                //   preferences.clear().then(
-                                //         (value) =>
-                                //             Navigator.pushNamedAndRemoveUntil(
-                                //                 context,
-                                //                 '/picturecomponents',
-                                //                 (route) => false),
-                                //       );
-                                // },
-                                // onPressed: () => Navigator.of(context).pop(null),
-                                // onPressed: () {
-                                //   Navigator.of(context).maybePop();
-                                // },
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
@@ -1445,22 +1484,61 @@ class _TravelState extends State<Travel> {
                             )
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: size.height * 0.001,
-                              left: size.height * 0.02),
-                          child: Text(
-                            'Golfy.theerawee@gmail.com',
-                            style: GoogleFonts.kanit(
-                              textStyle: TextStyle(
-                                  // fontSize: 35,
-                                  ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Icon(
+                                Icons.tag,
+                                color: Colors.greenAccent,
+                                size: 18,
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  // top: size.height * 0.01,
+                                  left: size.height * 0.02),
+                              child: Text(
+                                'แฮชแท็ก : ',
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  // top: size.height * 0.01,
+                                  left: size.height * 0.01),
+                              child: Text(
+                                tag,
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        Divider(
+                          color: Colors.black12,
+                          height: 10,
+                          thickness: 2,
+                          indent: 10,
+                          endIndent: size.width * 0.025,
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              top: size.height * 0.009,
+                              top: size.height * 0.01,
                               left: size.height * 0.25),
                           child: ClipRRect(
                             clipBehavior: Clip.antiAlias,
@@ -1492,7 +1570,7 @@ class _TravelState extends State<Travel> {
                             children: [
                               Icon(
                                 Icons.date_range_outlined,
-                                color: Colors.black54,
+                                color: Colors.greenAccent,
                                 size: 18,
                               ),
                               Padding(
@@ -1502,8 +1580,8 @@ class _TravelState extends State<Travel> {
                                   "วันที่ : ",
                                   style: GoogleFonts.kanit(
                                     textStyle: TextStyle(
-                                        // fontSize: 35,
-                                        ),
+                                      fontSize: 14,
+                                    ),
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
@@ -1512,7 +1590,7 @@ class _TravelState extends State<Travel> {
                                 width: 3,
                               ),
                               Text(
-                                uploaddate.toString(),
+                                date.toString(),
                                 style: GoogleFonts.kanit(
                                   textStyle: TextStyle(
                                       // fontSize: 35,
@@ -1533,7 +1611,7 @@ class _TravelState extends State<Travel> {
                             children: [
                               Icon(
                                 Icons.description_outlined,
-                                color: Colors.black54,
+                                color: Colors.greenAccent,
                                 size: 18,
                               ),
                               Padding(
@@ -1543,8 +1621,8 @@ class _TravelState extends State<Travel> {
                                   "คำอธิบายรูปภาพ",
                                   style: GoogleFonts.kanit(
                                     textStyle: TextStyle(
-                                        // fontSize: 35,
-                                        ),
+                                      fontSize: 14,
+                                    ),
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
@@ -1563,28 +1641,45 @@ class _TravelState extends State<Travel> {
                             children: [
                               Icon(
                                 Icons.comment,
-                                color: Colors.black54,
+                                color: Colors.greenAccent,
                                 size: 18,
                               ),
                               Padding(
                                 padding:
                                     EdgeInsets.only(left: size.height * 0.01),
-                                child: Text(
-                                  uploadname,
-                                  style: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                        // fontSize: 35,
+                                child: Flexible(
+                                  child: Container(
+                                    width: size.width * 0.5,
+                                    child: Text(
+                                      description,
+                                      style: GoogleFonts.kanit(
+                                        textStyle: TextStyle(
+                                          fontSize: 14,
                                         ),
+                                      ),
+                                      maxLines: 5,
+                                      textAlign: TextAlign.left,
+                                    ),
                                   ),
-                                  textAlign: TextAlign.left,
                                 ),
                               ),
                             ],
                           ),
                         ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        Divider(
+                          color: Colors.black12,
+                          height: 10,
+                          thickness: 2,
+                          indent: 10,
+                          endIndent: size.width * 0.025,
+                        ),
                         Padding(
                           padding: EdgeInsets.only(
-                              left: size.height * 0.04, top: size.height * 0.1),
+                              left: size.height * 0.04,
+                              top: size.height * 0.03),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1628,9 +1723,11 @@ class _TravelState extends State<Travel> {
                                         onTap: () {
                                           showDialogTravel(
                                               context,
-                                              upload.image,
-                                              upload.name,
-                                              upload.date);
+                                              uploadimage,
+                                              uploadname,
+                                              tag,
+                                              date,
+                                              description);
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -1676,39 +1773,6 @@ class _TravelState extends State<Travel> {
                                                           ),
                                                         ),
                                                       ),
-                                                      // Padding(
-                                                      //   padding: EdgeInsets.only(
-                                                      //       top: size.height * 0.25),
-                                                      //   child: GridTile(
-                                                      //     footer: Material(
-                                                      //       color: Colors.transparent,
-                                                      //       shape: RoundedRectangleBorder(
-                                                      //         borderRadius:
-                                                      //             BorderRadius.vertical(
-                                                      //           bottom: Radius.circular(15),
-                                                      //         ),
-                                                      //       ),
-                                                      //       clipBehavior: Clip.antiAlias,
-                                                      //     ),
-                                                      //     child: GridTileBar(
-                                                      //       // backgroundColor: Colors.black12,
-                                                      //       title: Text(
-                                                      // cutWord('${upload.name}'),
-                                                      //         textAlign: TextAlign.center,
-                                                      //         softWrap: true,
-                                                      //         style: TextStyle(
-                                                      //           fontSize: 18,
-                                                      //         ),
-                                                      //       ),
-                                                      //       subtitle: Text(
-                                                      //         '${upload.date}',
-                                                      //         textAlign: TextAlign.center,
-                                                      //         softWrap: true,
-                                                      //         style: TextStyle(fontSize: 18),
-                                                      //       ),
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),

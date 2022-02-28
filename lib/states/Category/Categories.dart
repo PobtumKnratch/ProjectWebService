@@ -11,6 +11,7 @@ import 'package:flutter_project_web_supportandservice/states/Category/travel.dar
 import 'package:flutter_project_web_supportandservice/widget/constants.dart';
 import 'package:flutter_project_web_supportandservice/widget/search_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class Categories extends StatefulWidget {
 
 class _CategoriesState extends State<Categories> {
   // ignore: unused_field
+  Upload? model;
   static const String routeName = '/categories';
   List<Upload> models = [];
   List<Upload2> models2 = [];
@@ -64,8 +66,71 @@ class _CategoriesState extends State<Categories> {
   // return jsonData;
   @override
   void initState() {
+    initData();
     getStart();
     super.initState();
+  }
+
+  Future<void> initData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? topic_ic = preferences.getString('topic_id');
+    if (topic_ic == '1') {
+      List<Upload2> models2 = await selectupload2();
+      print('length ===>>>> ${models2.length}');
+      for (var item in models2) {
+        showModel.add(Upload(
+            title: 'หมวดหมู่การท่องเที่ยว',
+            id: item.id,
+            user_id: item.user_id,
+            name: item.name,
+            description: item.description,
+            image: 'fileupload2/${item.image}',
+            date: item.date,
+            tag: item.tag));
+      }
+    } else if (topic_ic == '2') {
+      List<Upload> models = await selectupload();
+      print('length ===>>>> ${models.length}');
+      for (var item in models) {
+        showModel.add(Upload(
+            title: 'หมวดหมู่อาหาร',
+            id: item.id,
+            user_id: item.user_id,
+            name: item.name,
+            description: item.description,
+            image: 'fileupload/${item.image}',
+            date: item.date,
+            tag: item.tag));
+      }
+    } else if (topic_ic == '3') {
+      List<Upload3> models3 = await selectupload3();
+      print('length ===>>>> ${models3.length}');
+      for (var item in models3) {
+        showModel.add(Upload(
+            title: 'ป้ายสถานที่ท่องเที่ยวต่างๆ',
+            id: item.id,
+            user_id: item.user_id,
+            name: item.name,
+            description: item.description,
+            image: 'fileupload3/${item.image}',
+            date: item.date,
+            tag: item.tag));
+      }
+    } else if (topic_ic == '4') {
+      List<Upload4> models4 = await selectupload4();
+      print('length ===>>>> ${models4.length}');
+      for (var item in models4) {
+        showModel.add(Upload(
+            title: 'หมวดหมู่ตามสถานการณ์',
+            id: item.id,
+            user_id: item.user_id,
+            name: item.name,
+            description: item.description,
+            image: 'fileupload4/${item.image}',
+            date: item.date,
+            tag: item.tag));
+      }
+    }
   }
 
   Widget menubuild() {
@@ -818,7 +883,9 @@ class _CategoriesState extends State<Categories> {
             Padding(
               padding: EdgeInsets.only(top: size.height * 0.01),
               child: [
-                Travel(models: showModel2),
+                Travel(models: showModel2, 
+                // model: model!
+                ),
                 Scenario(models: showModel4),
                 FoodState(models: showModel),
                 Signboard(models: showModel3),
@@ -1102,7 +1169,9 @@ class _CategoriesState extends State<Categories> {
                               ),
                             ),
                             [
-                              Travel(models: showModel2),
+                              Travel(models: showModel2, 
+                              // model: model!
+                              ),
                               Scenario(models: showModel4),
                               FoodState(models: showModel),
                               Signboard(models: showModel3),
@@ -1220,7 +1289,9 @@ class _CategoriesState extends State<Categories> {
                               ),
                             ),
                             [
-                              Travel(models: showModel2),
+                              Travel(models: showModel2, 
+                              // model: model!
+                              ),
                               Scenario(models: showModel4),
                               FoodState(models: showModel),
                               Signboard(models: showModel3),
