@@ -53,7 +53,7 @@ Future<void> main() async {
         initialRoute = '/homeuseredit';
     }
   } else {
-    initialRoute = '/homeuseredit';
+    initialRoute = '/login';
   }
 
   runApp(MyApp());

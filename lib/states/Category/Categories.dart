@@ -1162,7 +1162,7 @@ class _CategoriesState extends State<Categories> {
                                   Text(
                                     categories[selectIndex],
                                     style: GoogleFonts.kanit(
-                                      // fontSize: 18,
+                                      fontSize: 18,
                                       color: Colors.greenAccent.shade700,
                                     ),
                                   ),

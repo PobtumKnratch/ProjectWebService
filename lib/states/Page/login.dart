@@ -84,7 +84,7 @@ class _BodyState extends State<Body> {
       },
       body: json.encode(data),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) { 
       // print(response.body);
       Map<String, dynamic> map = json.decode(response.body);
       // ignore: unnecessary_brace_in_string_interps
@@ -136,14 +136,15 @@ class _BodyState extends State<Body> {
           toastLength: Toast.LENGTH_LONG,
         );
       }
-    } else {
-      // Fluttertoast.showToast(
-      //   msg: 'ข้อมูลผู้ใช้ไม่ถูกต้อง กรุณากรอกข้อมูลใหม่',
-      //   gravity: ToastGravity.CENTER_RIGHT,
-      //   toastLength: Toast.LENGTH_LONG,
-      // );
-      print('Response status login: [${response.statusCode}]');
-    }
+    } 
+    // else {
+    //   // Fluttertoast.showToast(
+    //   //   msg: 'ข้อมูลผู้ใช้ไม่ถูกต้อง กรุณากรอกข้อมูลใหม่',
+    //   //   gravity: ToastGravity.CENTER_RIGHT,
+    //   //   toastLength: Toast.LENGTH_LONG,
+    //   // );
+    //   print('Response status login: [${response.statusCode}]');
+    // }
   }
 
   Future<Null> routeService(Widget myWidget, Userlogin userlogin) async {
@@ -177,10 +178,10 @@ class _BodyState extends State<Body> {
           Padding(
             padding: EdgeInsets.only(top: size.height * 0.2),
             child: Container(
-              height: size.height*0.5,
+              // height: size.height*0.5,
               width: size.width*0.85,
               decoration: BoxDecoration(
-                color: Colors.red,
+                color: Colors.white60,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
@@ -211,144 +212,142 @@ class _BodyState extends State<Body> {
                   SizedBox(
                     height: size.height*0.03,
                   ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.08,
-                      ),
-                      child: Form(
-                        key: formKey,
-                        child: Column(
-                          children: [
-                            Container(
-                              width: size.width * 0.6,
-                              height: size.height * 0.05,
-                              child: TextFormField(
-                                // obscureText: true,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please fill out your information';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: usernameController,
-                                onChanged: (value) => username = value.trim(),
-                                decoration: InputDecoration(
-                                  errorStyle: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                      color: Colors.red.shade400,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                  Container(padding: EdgeInsets.only(bottom: size.height*0.02),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.08,
+                    ),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: size.width * 0.6,
+                            // height: size.height * 0.05,
+                            child: TextFormField(
+                              // obscureText: true,
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please fill out your information';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              controller: usernameController,
+                              onChanged: (value) => username = value.trim(),
+                              decoration: InputDecoration(
+                                errorStyle: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.red.shade400,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  labelText: "Enter your username :",
-                                  labelStyle: GoogleFonts.kanit(
-                                    textStyle:
-                                        TextStyle(fontSize: size.height * 0.02),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                        color: Colors.black54, width: 1),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
                                 ),
+                                labelText: "Enter your username :",
+                                labelStyle: GoogleFonts.kanit(
+                                  textStyle:
+                                      TextStyle(fontSize: size.height * 0.02),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                      color: Colors.black54, width: 1),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: size.width * 0.6,
-                              height: size.height * 0.05,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please fill out your information';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                keyboardType: TextInputType.visiblePassword,
-                                obscureText: true,
-                                controller: passwordController,
-                                onChanged: (value) => password = value.trim(),
-                                decoration: InputDecoration(
-                                  // suffixIcon: Icon(Icons.remove_red_eye),
-                                  errorStyle: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                      color: Colors.red.shade400,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: size.width * 0.6,
+                            // height: size.height * 0.05,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please fill out your information';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: true,
+                              controller: passwordController,
+                              onChanged: (value) => password = value.trim(),
+                              decoration: InputDecoration(
+                                // suffixIcon: Icon(Icons.remove_red_eye),
+                                errorStyle: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.red.shade400,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  labelText: "Enter your password :",
-                                  labelStyle: GoogleFonts.kanit(
-                                    textStyle:
-                                        TextStyle(fontSize: size.height * 0.02),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                      color: Colors.black54,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
                                 ),
+                                labelText: "Enter your password :",
+                                labelStyle: GoogleFonts.kanit(
+                                  textStyle:
+                                      TextStyle(fontSize: size.height * 0.02),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: Colors.black54,
+                                    width: 1,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
                               ),
                             ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Container(
-                              width: size.width * 0.25,
-                              height: size.height * 0.045,
-                              child: ElevatedButton(
-                                child: Text(
-                                  "LogIn",
-                                  style: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: size.height * 0.016),
-                                  ),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            width: size.width * 0.25,
+                            height: size.height * 0.045,
+                            child: ElevatedButton(
+                              child: Text(
+                                "LogIn",
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: size.height * 0.016),
                                 ),
-                                onPressed: () async {
-                                  if (formKey.currentState!.validate()) {
-                                    // print('username = $username, password = $password');
+                              ),
+                              onPressed: () async {
+                                if (formKey.currentState!.validate()) {
+                                  // print('username = $username, password = $password');
 
-                                    // ignore: unnecessary_null_comparison
-                                    if (username == null ||
-                                        username.isEmpty ||
-                                        // ignore: unnecessary_null_comparison
-                                        password == null ||
-                                        password.isEmpty) {
-                                      normalDialog(
-                                          context,
-                                          'ไม่สามารถเข้าสู่ระบบได้',
-                                          'กรุณากรอกข้อมูลของท่านให้ครบถ้วน');
-                                    } else {
-                                      checkAuthen(
-                                          username: username,
-                                          password: password);
-                                    }
-                                  } else {}
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.redAccent,
-                                  onPrimary: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                                  // ignore: unnecessary_null_comparison
+                                  if (username == null ||
+                                      username.isEmpty ||
+                                      // ignore: unnecessary_null_comparison
+                                      password == null ||
+                                      password.isEmpty) {
+                                    normalDialog(
+                                        context,
+                                        'ไม่สามารถเข้าสู่ระบบได้',
+                                        'กรุณากรอกข้อมูลของท่านให้ครบถ้วน');
+                                  } else {
+                                    checkAuthen(
+                                        username: username,
+                                        password: password);
+                                  }
+                                } else {}
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.greenAccent,
+                                onPrimary: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -363,10 +362,10 @@ class _BodyState extends State<Body> {
           Padding(
             padding: EdgeInsets.only(top: size.height * 0.25),
             child: Container(
-              height: size.height*0.5,
+              // height: size.height*0.5,
               width: size.height*0.5,
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.white60,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
@@ -393,146 +392,142 @@ class _BodyState extends State<Body> {
                   SizedBox(
                     height: 15,
                   ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.07,
-                      ),
-                      child: Form(
-                        key: formKey,
-                        child: Expanded(
-                          child: Column(
-                            children: [
-                              Container(
-                              width: size.width * 0.6,
-                              height: size.height * 0.05,
-                              child: TextFormField(
-                                // obscureText: true,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please fill out your information';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: usernameController,
-                                onChanged: (value) => username = value.trim(),
-                                decoration: InputDecoration(
-                                  errorStyle: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                      color: Colors.red.shade400,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  labelText: "Enter your username :",
-                                  labelStyle: GoogleFonts.kanit(
-                                    textStyle:
-                                        TextStyle(fontSize: size.height * 0.02),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                        color: Colors.black54, width: 1),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
+                  Container(padding: EdgeInsets.only(bottom: size.height*0.02),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.07,
+                    ),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          Container(
+                          width: size.width * 0.6,
+                          // height: size.height * 0.05,
+                          child: TextFormField(
+                            // obscureText: true,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please fill out your information';
+                              } else {
+                                return null;
+                              }
+                            },
+                            controller: usernameController,
+                            onChanged: (value) => username = value.trim(),
+                            decoration: InputDecoration(
+                              errorStyle: GoogleFonts.kanit(
+                                textStyle: TextStyle(
+                                  color: Colors.red.shade400,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              labelText: "Enter your username :",
+                              labelStyle: GoogleFonts.kanit(
+                                textStyle:
+                                    TextStyle(fontSize: size.height * 0.02),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                    color: Colors.black54, width: 1),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
                             ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                              width: size.width * 0.6,
-                              height: size.height * 0.05,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please fill out your information';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                keyboardType: TextInputType.visiblePassword,
-                                obscureText: true,
-                                controller: passwordController,
-                                onChanged: (value) => password = value.trim(),
-                                decoration: InputDecoration(
-                                  // suffixIcon: Icon(Icons.remove_red_eye),
-                                  errorStyle: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                      color: Colors.red.shade400,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  labelText: "Enter your password :",
-                                  labelStyle: GoogleFonts.kanit(
-                                    textStyle:
-                                        TextStyle(fontSize: size.height * 0.02),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                      color: Colors.black54,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                ),
-                              ),
-                            ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                width: size.width * 0.25,
-                                height: size.height * 0.045,
-                                child: ElevatedButton(
-                                  child: Text(
-                                    "LogIn",
-                                    style: GoogleFonts.kanit(
-                                      textStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: size.height * 0.016),
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    if (formKey.currentState!.validate()) {
-                                      // print('username = $username, password = $password');
-
-                                      // ignore: unnecessary_null_comparison
-                                      if (username == null ||
-                                          username.isEmpty ||
-                                          // ignore: unnecessary_null_comparison
-                                          password == null ||
-                                          password.isEmpty) {
-                                        normalDialog(
-                                            context,
-                                            'ไม่สามารถเข้าสู่ระบบได้',
-                                            'กรุณากรอกข้อมูลของท่านให้ครบถ้วน');
-                                      } else {
-                                        checkAuthen(
-                                            username: username,
-                                            password: password);
-                                      }
-                                    } else {}
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.amber,
-                                    onPrimary: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
                         ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                          width: size.width * 0.6,
+                          // height: size.height * 0.05,
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please fill out your information';
+                              } else {
+                                return null;
+                              }
+                            },
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: true,
+                            controller: passwordController,
+                            onChanged: (value) => password = value.trim(),
+                            decoration: InputDecoration(
+                              // suffixIcon: Icon(Icons.remove_red_eye),
+                              errorStyle: GoogleFonts.kanit(
+                                textStyle: TextStyle(
+                                  color: Colors.red.shade400,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              labelText: "Enter your password :",
+                              labelStyle: GoogleFonts.kanit(
+                                textStyle:
+                                    TextStyle(fontSize: size.height * 0.02),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Colors.black54,
+                                  width: 1,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            width: size.width * 0.25,
+                            height: size.height * 0.045,
+                            child: ElevatedButton(
+                              child: Text(
+                                "LogIn",
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: size.height * 0.016),
+                                ),
+                              ),
+                              onPressed: () async {
+                                if (formKey.currentState!.validate()) {
+                                  // print('username = $username, password = $password');
+
+                                  // ignore: unnecessary_null_comparison
+                                  if (username == null ||
+                                      username.isEmpty ||
+                                      // ignore: unnecessary_null_comparison
+                                      password == null ||
+                                      password.isEmpty) {
+                                    normalDialog(
+                                        context,
+                                        'ไม่สามารถเข้าสู่ระบบได้',
+                                        'กรุณากรอกข้อมูลของท่านให้ครบถ้วน');
+                                  } else {
+                                    checkAuthen(
+                                        username: username,
+                                        password: password);
+                                  }
+                                } else {}
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.greenAccent,
+                                onPrimary: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -547,7 +542,7 @@ class _BodyState extends State<Body> {
           Padding(
             padding: EdgeInsets.only(top: size.height * 0.15),
             child: Container(
-              height: 540,
+              // height: size.height,
               width: 540,
               decoration: BoxDecoration(
                 color: Colors.white60,
@@ -581,143 +576,142 @@ class _BodyState extends State<Body> {
                   SizedBox(
                     height: 30,
                   ),
-                  Expanded(
-                    child: Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.05),
-                      child: Form(
-                        key: formKey,
-                        child: Column(
-                          children: [
-                            Container(
-                              width: size.width * 0.6,
-                              height: size.height * 0.07,
-                              child: TextFormField(
-                                // obscureText: true,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please fill out your information';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: usernameController,
-                                onChanged: (value) => username = value.trim(),
-                                decoration: InputDecoration(
-                                  errorStyle: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                      color: Colors.red.shade400,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: size.height*0.02),
+                    margin:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          Container(
+                            // width: size.width,
+                            // height: size.height,
+                            child: TextFormField(
+                              // obscureText: true,
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please fill out your information';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              controller: usernameController,
+                              onChanged: (value) => username = value.trim(),
+                              decoration: InputDecoration(
+                                errorStyle: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.red.shade400,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  labelText: "Enter your username :",
-                                  labelStyle: GoogleFonts.kanit(
-                                    textStyle:
-                                        TextStyle(fontSize: size.height * 0.02),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                        color: Colors.black54, width: 1),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
                                 ),
+                                labelText: "Enter your username :",
+                                labelStyle: GoogleFonts.kanit(
+                                  textStyle:
+                                      TextStyle(fontSize: size.height * 0.02),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                      color: Colors.black54, width: 1),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
                               ),
                             ),
-                            SizedBox(
-                              height: 18,
-                            ),
-                            Container(
-                              width: size.width * 0.6,
-                              height: size.height * 0.07,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please fill out your information';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                keyboardType: TextInputType.visiblePassword,
-                                obscureText: true,
-                                controller: passwordController,
-                                onChanged: (value) => password = value.trim(),
-                                decoration: InputDecoration(
-                                  // suffixIcon: Icon(Icons.remove_red_eye),
-                                  errorStyle: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                      color: Colors.red.shade400,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          ),
+                          SizedBox(
+                            height: 18,
+                          ),
+                          Container(
+                            // width: size.width * 0.6,
+                            // height: size.height * 0.07,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please fill out your information';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: true,
+                              controller: passwordController,
+                              onChanged: (value) => password = value.trim(),
+                              decoration: InputDecoration(
+                                // suffixIcon: Icon(Icons.remove_red_eye),
+                                errorStyle: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                    color: Colors.red.shade400,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  labelText: "Enter your password :",
-                                  labelStyle: GoogleFonts.kanit(
-                                    textStyle:
-                                        TextStyle(fontSize: size.height * 0.02),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(
-                                      color: Colors.black54,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
                                 ),
+                                labelText: "Enter your password :",
+                                labelStyle: GoogleFonts.kanit(
+                                  textStyle:
+                                      TextStyle(fontSize: size.height * 0.02),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: Colors.black54,
+                                    width: 1,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
                               ),
                             ),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Container(
-                              width: size.width * 0.1,
-                              height: size.height * 0.045,
-                              child: ElevatedButton(
-                                child: Text(
-                                  "LogIn",
-                                  style: GoogleFonts.kanit(
-                                    textStyle: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: size.height * 0.016),
-                                  ),
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Container(
+                            width: size.width * 0.1,
+                            height: size.height * 0.045,
+                            child: ElevatedButton(
+                              child: Text(
+                                "LogIn",
+                                style: GoogleFonts.kanit(
+                                  textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: size.height * 0.016),
                                 ),
-                                onPressed: () async {
-                                  if (formKey.currentState!.validate()) {
-                                    // print('username = $username, password = $password');
+                              ),
+                              onPressed: () async {
+                                if (formKey.currentState!.validate()) {
+                                  // print('username = $username, password = $password');
 
-                                    // ignore: unnecessary_null_comparison
-                                    if (username == null ||
-                                        username.isEmpty ||
-                                        // ignore: unnecessary_null_comparison
-                                        password == null ||
-                                        password.isEmpty) {
-                                      normalDialog(
-                                          context,
-                                          'ไม่สามารถเข้าสู่ระบบได้',
-                                          'กรุณากรอกข้อมูลของท่านให้ครบถ้วน');
-                                    } else {
-                                      checkAuthen(
-                                          username: username,
-                                          password: password);
-                                    }
-                                  } else {}
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.greenAccent,
-                                  onPrimary: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                                  // ignore: unnecessary_null_comparison
+                                  if (username == null ||
+                                      username.isEmpty ||
+                                      // ignore: unnecessary_null_comparison
+                                      password == null ||
+                                      password.isEmpty) {
+                                    normalDialog(
+                                        context,
+                                        'ไม่สามารถเข้าสู่ระบบได้',
+                                        'กรุณากรอกข้อมูลของท่านให้ครบถ้วน');
+                                  } else {
+                                    checkAuthen(
+                                        username: username,
+                                        password: password);
+                                  }
+                                } else {}
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.greenAccent,
+                                onPrimary: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
